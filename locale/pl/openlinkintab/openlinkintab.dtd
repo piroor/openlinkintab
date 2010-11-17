@@ -1,7 +1,4 @@
-<!ENTITY config.title        "Tree Style Tab – ustawienia">
-
-<!ENTITY config.scale.min "min.">
-<!ENTITY config.scale.max "maks.">
+<!ENTITY config.title        "Open Link in New Tab – ustawienia">
 
 <!ENTITY config.tabs.link     "Odnośniki">
 <!ENTITY config.tabs.jsopen     "Scripts">

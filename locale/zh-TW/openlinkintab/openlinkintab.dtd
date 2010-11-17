@@ -1,8 +1,4 @@
-<!ENTITY config.title        "樹狀分頁設定">
-
-<!ENTITY config.scale.min "小">
-<!ENTITY config.scale.max "大">
-
+<!ENTITY config.title        "Open Link in New Tab設定">
 
 <!ENTITY config.tabs.link     "Links">
 <!ENTITY config.tabs.jsopen     "Scripts">
