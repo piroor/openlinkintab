@@ -1,5 +1,5 @@
-Components.utils.import('resource://treestyletab-modules/prefs.js', {});
-Components.utils.import('resource://treestyletab-modules/namespace.jsm');
+Components.utils.import('resource://openlinkintab-modules/prefs.js', {});
+Components.utils.import('resource://openlinkintab-modules/namespace.jsm');
 var prefs = getNamespaceFor('piro.sakura.ne.jp')['piro.sakura.ne.jp'].prefs;
 
 var gOpenLinkInTabScale;
@@ -7,8 +7,8 @@ var gOpenLinkInTabScale;
 function initLinkPane()
 {
 	gOpenLinkInTabScale = new ScaleSet(
-		['extensions.treestyletab.openOuterLinkInNewTab',
-		 'extensions.treestyletab.openAnyLinkInNewTab'],
+		['extensions.openlinkintab@piro.sakura.ne.jp.openOuterLinkInNewTab',
+		 'extensions.openlinkintab@piro.sakura.ne.jp.openAnyLinkInNewTab'],
 		'openLinkInNewTab-scale',
 		'openLinkInNewTab-labels'
 	);
