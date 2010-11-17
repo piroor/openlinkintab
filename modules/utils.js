@@ -50,7 +50,7 @@ var OpenLinkInTabUtils = {
 	kPREFROOT : 'extensions.openlinkintab@piro.sakura.ne.jp',
 	kID : 'openlinkintab-id',
 	
-	get XULAppInfo() {
+	get XULAppInfo() { 
 		if (!this._XULAppInfo) {
 			this._XULAppInfo = Cc['@mozilla.org/xre/app-info;1'].getService(Ci.nsIXULAppInfo).QueryInterface(Ci.nsIXULRuntime);
 		}
@@ -85,37 +85,6 @@ var OpenLinkInTabUtils = {
 			(aEvent.ctrlKey || (aEvent.keyCode == Ci.nsIDOMKeyEvent.DOM_VK_CONTROL)) ;
 	},
   
-	checkReadyToOpenNewTabOnLocationBar : function OLITUtils_checkReadyToOpenNewTabOnLocationBar(aURI, aModifier) 
-	{
-		var result = window['piro.sakura.ne.jp'].autoNewTabHelper.checkReadyToOpenNewTab({
-			uri      : aURI,
-			external : {
-				newTab     : this.getMyPref('urlbar.loadDifferentDomainToNewTab'),
-				forceChild : this.getMyPref('urlbar.loadDifferentDomainToNewTab.asChild')
-			},
-			internal : {
-				newTab     : this.getMyPref('urlbar.loadSameDomainToNewTab'),
-				forceChild : this.getMyPref('urlbar.loadSameDomainToNewTab.asChild')
-			},
-			modifier : aModifier,
-			invert   : this.getMyPref('urlbar.invertDefaultBehavior'),
-			useEffectiveTLD : this.getMyPref('useEffectiveTLD')
-		});
-
-		if (
-			result.open && result.owner &&
-			'treeStyleTab' in result.tabbrowser &&
-			'readyToOpenChildTab' in result.tabbrowser.treeStyleTab
-			)
-			result.tabbrowser.treeStyleTab.readyToOpenChildTab(
-				result.owner,
-				false,
-				result.lastRelatedTab && result.lastRelatedTab.nextSibling
-			);
-
-		return result.open;
-	},
- 
 	checkReadyToOpenNewTabFromLink : function OLITUtils_checkReadyToOpenNewTabFromLink(aLink) 
 	{
 		var options = aLink;

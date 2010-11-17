@@ -2,9 +2,7 @@ Components.utils.import('resource://treestyletab-modules/prefs.js', {});
 Components.utils.import('resource://treestyletab-modules/namespace.jsm');
 var prefs = getNamespaceFor('piro.sakura.ne.jp')['piro.sakura.ne.jp'].prefs;
 
-var gOpenLinkInTabScale,
-	gLoadLocationBarToNewTabScale,
-	gLoadLocationBarToChildTabScale;
+var gOpenLinkInTabScale;
 
 function initLinkPane()
 {
@@ -14,30 +12,6 @@ function initLinkPane()
 		'openLinkInNewTab-scale',
 		'openLinkInNewTab-labels'
 	);
-}
-
-function initUrlbarPane()
-{
-	gOpenLinkInTabScale = new ScaleSet(
-		['extensions.treestyletab.openOuterLinkInNewTab',
-		 'extensions.treestyletab.openAnyLinkInNewTab'],
-		'openLinkInNewTab-scale',
-		'openLinkInNewTab-labels'
-	);
-	gLoadLocationBarToNewTabScale = new ScaleSet(
-		['extensions.treestyletab.urlbar.loadDifferentDomainToNewTab',
-		 'extensions.treestyletab.urlbar.loadSameDomainToNewTab'],
-		'loadLocationBarToNewTab-scale',
-		'loadLocationBarToNewTab-labels'
-	);
-	gLoadLocationBarToChildTabScale = new ScaleSet(
-		['extensions.treestyletab.urlbar.loadSameDomainToNewTab.asChild',
-		 'extensions.treestyletab.urlbar.loadDifferentDomainToNewTab.asChild'],
-		'loadLocationBarToChildTab-scale',
-		'loadLocationBarToChildTab-labels'
-	);
-
-	gLoadLocationBarToChildTabScale.disabled = gLoadLocationBarToNewTabScale.value == 0;
 }
 
 function initJSOpenPane()

@@ -34,9 +34,9 @@ var OpenLinkInTabService = {
 		window.addEventListener('unload', this, false);
 		window.addEventListener('TabOpen', this, true);
 
-//		this.overrideExtensionsOnInitBefore(); // hacks.js
+		this.overrideExtensionsOnInitBefore(); // hacks.js
 		this.overrideGlobalFunctions();
-//		this.overrideExtensionsOnInitAfter(); // hacks.js
+		this.overrideExtensionsOnInitAfter(); // hacks.js
 
 		this.initUninstallationListener();
 	},
@@ -80,41 +80,6 @@ var OpenLinkInTabService = {
  
 	overrideGlobalFunctions : function OLITService_overrideGlobalFunctions() 
 	{
-		let (toolbox) {
-			toolbox = document.getElementById('navigator-toolbox');
-			if (toolbox.customizeDone) {
-				toolbox.__openlinkintab__customizeDone = toolbox.customizeDone;
-				toolbox.customizeDone = function(aChanged) {
-					this.__openlinkintab__customizeDone(aChanged);
-					OpenLinkInTabService.initToolbarItems();
-				};
-			}
-			if ('BrowserToolboxCustomizeDone' in window) {
-				window.__openlinkintab__BrowserToolboxCustomizeDone = window.BrowserToolboxCustomizeDone;
-				window.BrowserToolboxCustomizeDone = function(aChanged) {
-					window.__openlinkintab__BrowserToolboxCustomizeDone.apply(window, arguments);
-					OpenLinkInTabService.initToolbarItems();
-				};
-			}
-			this.initToolbarItems();
-			toolbox = null;
-		}
-
-		this._splitFunctionNames(<![CDATA[
-			window.permaTabs.utils.wrappedFunctions["window.BrowserLoadURL"]
-			window.BrowserLoadURL
-		]]>).forEach(function(aFunc) {
-			let source = this._getFunctionSource(aFunc);
-			if (!source || !/^\(?function BrowserLoadURL/.test(source))
-				return;
-			eval(aFunc+' = '+source.replace(
-				'aTriggeringEvent && aTriggeringEvent.altKey',
-				'OpenLinkInTabService.checkReadyToOpenNewTabOnLocationBar(url, $&)'
-			));
-			source = null;
-		}, this);
-
-
 		this._splitFunctionNames(<![CDATA[
 			window.duplicateTab.handleLinkClick
 			window.__openlinkintab__highlander__origHandleLinkClick
@@ -237,26 +202,6 @@ var OpenLinkInTabService = {
 		return func ? func.toSource() : null ;
 	},
   
-	initToolbarItems : function OLITService_initToolbarItems() 
-	{
-		var bar = document.getElementById('urlbar');
-		if (!bar) return;
-
-		var source;
-		if (
-			'handleCommand' in bar &&
-			(source = bar.handleCommand.toSource()) &&
-			source.indexOf('OpenLinkInTabService') < 0
-			) {
-			eval('bar.handleCommand = '+source.replace(
-				/(aTriggeringEvent && aTriggeringEvent\.altKey)/g,
-				'OpenLinkInTabService.checkReadyToOpenNewTabOnLocationBar(this.value, $1)'
-			));
-		}
-		bar    = null;
-		source = null;
-	},
- 
 	handleEvent : function OLITService_handleEvent(aEvent) 
 	{
 		switch (aEvent.type)

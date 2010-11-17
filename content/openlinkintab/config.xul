@@ -54,65 +54,6 @@
 
 </prefpane>
 
-<prefpane id="prefpane-urlbar" label="&config.tabs.urlbar;"
-	onpaneload="initUrlbarPane();">
-	<preferences>
-		<preference id="extensions.openlinkintab@piro.sakura.ne.jp.urlbar.loadDifferentDomainToNewTab"
-			name="extensions.openlinkintab@piro.sakura.ne.jp.urlbar.loadDifferentDomainToNewTab"
-			type="bool"/>
-		<preference id="extensions.openlinkintab@piro.sakura.ne.jp.urlbar.loadDifferentDomainToNewTab.asChild"
-			name="extensions.openlinkintab@piro.sakura.ne.jp.urlbar.loadDifferentDomainToNewTab.asChild"
-			type="bool"/>
-		<preference id="extensions.openlinkintab@piro.sakura.ne.jp.urlbar.loadSameDomainToNewTab"
-			name="extensions.openlinkintab@piro.sakura.ne.jp.urlbar.loadSameDomainToNewTab"
-			type="bool"/>
-		<preference id="extensions.openlinkintab@piro.sakura.ne.jp.urlbar.loadSameDomainToNewTab.asChild"
-			name="extensions.openlinkintab@piro.sakura.ne.jp.urlbar.loadSameDomainToNewTab.asChild"
-			type="bool"/>
-	</preferences>
-	<groupbox>
-		<caption label="&config.urlbar.caption;"/>
-		<hbox align="stretch">
-			<scale id="loadLocationBarToNewTab-scale"
-				orient="vertical"
-				min="0"
-				max="2"
-				style="height:4em;"
-				onchange="
-					if (gLoadLocationBarToNewTabScale) {
-						gLoadLocationBarToNewTabScale.onChange();
-						gLoadLocationBarToChildTabScale.disabled = gLoadLocationBarToNewTabScale.value == 0;
-					}
-				"/>
-			<vbox id="loadLocationBarToNewTab-labels">
-				<label value="&config.urlbar.none;" control="loadLocationBarToNewTab-scale"/>
-				<spacer flex="1"/>
-				<label value="&config.urlbar.outer;" control="loadLocationBarToNewTab-scale"/>
-				<spacer flex="1"/>
-				<label value="&config.urlbar.any;" control="loadLocationBarToNewTab-scale"/>
-			</vbox>
-		</hbox>
-		<groupbox>
-			<caption label="&config.urlbar.asChild.caption;" />
-			<hbox align="stretch">
-				<scale id="loadLocationBarToChildTab-scale"
-					orient="vertical"
-					min="0"
-					max="2"
-					style="height:4em;"
-					onchange="if (gLoadLocationBarToChildTabScale) gLoadLocationBarToChildTabScale.onChange();"/>
-				<vbox id="loadLocationBarToChildTab-labels">
-					<label value="&config.urlbar.asChild.none;" control="loadLocationBarToChildTab-scale"/>
-					<spacer flex="1"/>
-					<label value="&config.urlbar.asChild.inner;" control="loadLocationBarToChildTab-scale"/>
-					<spacer flex="1"/>
-					<label value="&config.urlbar.asChild.any;" control="loadLocationBarToChildTab-scale"/>
-				</vbox>
-			</hbox>
-		</groupbox>
-	</groupbox>
-</prefpane>
-
 <prefpane id="prefpane-jsopen" label="&config.tabs.jsopen;"
 	onpaneload="initJSOpenPane();">
 	<preferences>
