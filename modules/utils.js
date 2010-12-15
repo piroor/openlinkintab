@@ -105,7 +105,8 @@ var OpenLinkInTabUtils = {
 				newTab : this.getMyPref('openAnyLinkInNewTab'),
 				forceChild : this.getMyPref('openAnyLinkInNewTab.asChild')
 			},
-			useEffectiveTLD : this.getMyPref('useEffectiveTLD')
+			useEffectiveTLD : this.getMyPref('useEffectiveTLD'),
+			checkUserHome   : this.getMyPref('checkUserHome')
 		};
 		options.uri = options.link.href;
 		var result = window['piro.sakura.ne.jp'].autoNewTabHelper.checkReadyToOpenNewTab(options);
