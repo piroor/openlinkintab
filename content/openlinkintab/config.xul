@@ -34,11 +34,14 @@
 					style="height:4em;"
 					onchange="if (gOpenLinkInTabScale) gOpenLinkInTabScale.onChange();"/>
 				<vbox id="openLinkInNewTab-labels">
-					<label value="&config.link.none;" control="openLinkInNewTab-scale"/>
+					<label value="&config.link.none;" control="openLinkInNewTab-scale"
+						onclick="this.linkedScale.value = 0;"/>
 					<spacer flex="1"/>
-					<label value="&config.link.outer;" control="openLinkInNewTab-scale"/>
+					<label value="&config.link.outer;" control="openLinkInNewTab-scale"
+						onclick="this.linkedScale.value = 1;"/>
 					<spacer flex="1"/>
-					<label value="&config.link.any;" control="openLinkInNewTab-scale"/>
+					<label value="&config.link.any;" control="openLinkInNewTab-scale"
+						onclick="this.linkedScale.value = 2;"/>
 				</vbox>
 			</hbox>
 		</groupbox>
