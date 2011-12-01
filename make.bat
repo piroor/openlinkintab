@@ -1,3 +1,3 @@
 copy buildscript\makexpi.sh .\
-bash makexpi.sh -n openlinkintab -v 0
+bash makexpi.sh -n openlinkintab
 del makexpi.sh
