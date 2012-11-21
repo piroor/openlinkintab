@@ -6,7 +6,7 @@
                    em:id="openlinkintab@piro.sakura.ne.jp"
                    em:name="Open Link in New Tab"
                    em:version="0.1.2011120101"
-                   em:creator="SHIMODA Hiroshi"
+                   em:creator="YUKI &quot;Piro&quot; Hiroshi"
                    em:description="Loads links in new tabs, by conditions."
                    em:homepageURL="http://piro.sakura.ne.jp/xul/_openlinkintab.html.en"
                    em:optionsURL="chrome://openlinkintab/content/config.xul">
@@ -23,7 +23,7 @@
                        em:name="Open Link in New Tab"
                        em:description="Loads links in new tabs, by conditions."
                        em:homepageURL="http://piro.sakura.ne.jp/xul/_openlinkintab.html.en"
-                       em:creator="SHIMODA Hiroshi">
+                       em:creator="YUKI &quot;Piro&quot; Hiroshi">
 		  <em:translator>Godai71.Extenzilla (it-IT locale)</em:translator>
 		  <em:translator>Fatiaomao (zh-CN locale)</em:translator>
 		  <em:translator>hzhbest (zh-CN locale)</em:translator>
@@ -41,7 +41,7 @@
                        em:name="リンクを新しいタブで開く"
                        em:description="リンクを条件に応じてタブで開きます。"
                        em:homepageURL="http://piro.sakura.ne.jp/xul/_openlinkintab.html"
-                       em:creator="SHIMODA Hiroshi">
+                       em:creator="YUKI &quot;Piro&quot; Hiroshi">
 		  <em:translator>Godai71.Extenzilla (it-IT locale)</em:translator>
 		  <em:translator>Fatiaomao (zh-CN locale)</em:translator>
 		  <em:translator>hzhbest (zh-CN locale)</em:translator>
