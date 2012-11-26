@@ -80,65 +80,60 @@ var OpenLinkInTabService = {
  
 	overrideGlobalFunctions : function OLITService_overrideGlobalFunctions() 
 	{
-		this._splitFunctionNames(<![CDATA[
-			window.duplicateTab.handleLinkClick
-			window.__openlinkintab__highlander__origHandleLinkClick
-			window.__splitbrowser__handleLinkClick
-			window.__ctxextensions__handleLinkClick
-			window.handleLinkClick
-		]]>).some(function(aFunc) {
+		[
+			'window.duplicateTab.handleLinkClick',
+			'window.__openlinkintab__highlander__origHandleLinkClick',
+			'window.__splitbrowser__handleLinkClick',
+			'window.__ctxextensions__handleLinkClick',
+			'window.handleLinkClick'
+		].some(function(aFunc) {
 			let source = this._getFunctionSource(aFunc);
 			if (!source || !/^\(?function handleLinkClick/.test(source))
 				return false;
 			eval(aFunc+' = '+source.replace(  // for -Firefox 3.6
 				/(event.ctrlKey|event.metaKey)/,
-				<![CDATA[
-					OpenLinkInTabService.checkReadyToOpenNewTabFromLink({
-						link     : (linkNode || { href : href }),
-						modifier : $1,
-						invert   : OpenLinkInTabService.getMyPref('link.invertDefaultBehavior')
-					}) &&
-					(
-						(OpenLinkInTabService.isNewTabAction(event) ? null : OpenLinkInTabService.readyToOpenDivertedTab()),
-						true
-					)
-				]]>
+				'OpenLinkInTabService.checkReadyToOpenNewTabFromLink({\n' +
+				'  link     : (linkNode || { href : href }),\n' +
+				'  modifier : $1,\n' +
+				'  invert   : OpenLinkInTabService.getMyPref("link.invertDefaultBehavior")\n' +
+				'}) &&\n' +
+				'(\n' +
+				'  (OpenLinkInTabService.isNewTabAction(event) ? null : OpenLinkInTabService.readyToOpenDivertedTab()),\n' +
+				'  true\n' +
+				')\n'
 			).replace( // for -Firefox 3.6
 				/* あらゆるリンクからタブを開く設定の時に、アクセルキーが押されていた場合は
 				   反転された動作（通常のリンク読み込み）を行う */
-				'return false;case 1:',
-				<![CDATA[
-						if ( // do nothing for Tab Mix Plus
-							!OpenLinkInTabService.getMyPref('compatibility.TMP') ||
-							!('TMP_contentAreaClick' in window)
-							) {
-							if ('TreeStyleTabService' in window &&
-								TreeStyleTabService.checkToOpenChildTab())
-								TreeStyleTabService.stopToOpenChildTab();
-							if (OpenLinkInTabService.isAccelKeyPressed(event)) {
-								if (linkNode)
-									urlSecurityCheck(href,
-										'nodePrincipal' in linkNode.ownerDocument ?
-											linkNode.ownerDocument.nodePrincipal :
-											linkNode.ownerDocument.location.href
-									);
-								var postData = {};
-								href = getShortcutOrURI(href, postData);
-								if (!href) return false;
-								loadURI(href, null, postData.value, false);
-							}
-						}
-						return false;
-					case 1:
-				]]>
+				/return\s+false;\s*case\s+1:/,
+				'  if ( // do nothing for Tab Mix Plus\n' +
+				'    !OpenLinkInTabService.getMyPref("compatibility.TMP") ||\n' +
+				'    !("TMP_contentAreaClick" in window)\n' +
+				'    ) {\n' +
+				'    if ("TreeStyleTabService" in window &&\n' +
+				'      TreeStyleTabService.checkToOpenChildTab())\n' +
+				'      TreeStyleTabService.stopToOpenChildTab();\n' +
+				'    if (OpenLinkInTabService.isAccelKeyPressed(event)) {\n' +
+				'      if (linkNode)\n' +
+				'        urlSecurityCheck(href,\n' +
+				'          "nodePrincipal" in linkNode.ownerDocument ?\n' +
+				'            linkNode.ownerDocument.nodePrincipal :\n' +
+				'            linkNode.ownerDocument.location.href\n' +
+				'        );\n' +
+				'      var postData = {};\n' +
+				'      href = getShortcutOrURI(href, postData);\n' +
+				'      if (!href) return false;\n' +
+				'      loadURI(href, null, postData.value, false);\n' +
+				'    }\n' +
+				'  }\n' +
+				'  return false;\n' +
+				'case 1:\n'
 			).replace( // for Firefox 4.0-
 				'where = whereToOpenLink(event);',
-				<![CDATA[$&
-					var OLITFilteringResult = OpenLinkInTabService.filterWhereToOpenLink(where, { linkNode : linkNode, event : event });
-					where = OLITFilteringResult.where;
-					if (OLITFilteringResult.divertedToTab)
-						OpenLinkInTabService.readyToOpenDivertedTab();
-				]]>.toString()
+				'$&\n' +
+				'  var OLITFilteringResult = OpenLinkInTabService.filterWhereToOpenLink(where, { linkNode : linkNode, event : event });\n' +
+				'  where = OLITFilteringResult.where;\n' +
+				'  if (OLITFilteringResult.divertedToTab)\n' +
+				'    OpenLinkInTabService.readyToOpenDivertedTab();\n'
 			).replace( // for Firefox 4.0-
 				/(if \([^\)]*where == "current")/,
 				'$1 && !OLITFilteringResult.inverted'
@@ -147,49 +142,35 @@ var OpenLinkInTabService = {
 			return true;
 		}, this);
 
-		this._splitFunctionNames(<![CDATA[
-			window.permaTabs.utils.wrappedFunctions["window.contentAreaClick"]
-			window.__contentAreaClick
-			window.__ctxextensions__contentAreaClick
-			window.contentAreaClick
-		]]>).forEach(function(aFunc) {
+		[
+			'window.permaTabs.utils.wrappedFunctions["window.contentAreaClick"]',
+			'window.__contentAreaClick',
+			'window.__ctxextensions__contentAreaClick',
+			'window.contentAreaClick'
+		].forEach(function(aFunc) {
 			let source = this._getFunctionSource(aFunc);
 			if (!source || !/^\(?function contentAreaClick/.test(source))
 				return;
 			eval(aFunc+' = '+source.replace(
-				/((openWebPanel\([^\;]+\);|PlacesUIUtils.showMinimalAddBookmarkUI\([^;]+\);)event.preventDefault\(\);return false;\})/,
-				<![CDATA[
-					$1
-					else if (
-						( // do nothing for Tab Mix Plus
-							!OpenLinkInTabService.getMyPref('compatibility.TMP') ||
-							!('TMP_contentAreaClick' in window)
-						) &&
-						OpenLinkInTabService.checkReadyToOpenNewTabFromLink(wrapper)
-						) {
-						event.stopPropagation();
-						event.preventDefault();
-						handleLinkClick(event, wrapper.href, linkNode);
-						return true;
-					}
-				]]>
+				/((openWebPanel\([^\;]+\);|PlacesUIUtils.showMinimalAddBookmarkUI\([^;]+\);)\s*event.preventDefault\(\);\s*return false;\s*\})/,
+				'$1\n' +
+				'else if (\n' +
+				'  ( // do nothing for Tab Mix Plus\n' +
+				'    !OpenLinkInTabService.getMyPref("compatibility.TMP") ||\n' +
+				'    !("TMP_contentAreaClick" in window)\n' +
+				'  ) &&\n' +
+				'  OpenLinkInTabService.checkReadyToOpenNewTabFromLink(wrapper)\n' +
+				'  ) {\n' +
+				'  event.stopPropagation();\n' +
+				'  event.preventDefault();\n' +
+				'  handleLinkClick(event, wrapper.href, linkNode);\n' +
+				'  return true;\n' +
+				'}\n'
 			));
 			source = null;
 		}, this);
 	},
 	
-	_splitFunctionNames : function OLITService_splitFunctionNames(aString) 
-	{
-		return String(aString)
-				.split(/\s+/)
-				.map(function(aString) {
-					return aString
-							.replace(/\/\*.*\*\//g, '')
-							.replace(/\/\/.+$/, '')
-							.replace(/^\s+|\s+$/g, '');
-				});
-	},
- 
 	_getFunctionSource : function OLITService_getFunctionSource(aFunc) 
 	{
 		var func;
