@@ -41,7 +41,7 @@ var OpenLinkInTabService = {
 		this.initUninstallationListener();
 
 		this.addPrefListener(this);
-		this.onPrefChange(this.kPREFROOT + '.handleEventsBeforeWebPages');
+		this.onPrefChange(this.kPREFROOT + '.handleEventsBeforeWebPages.domains');
 	},
 	initialized : false,
 	
@@ -79,6 +79,11 @@ var OpenLinkInTabService = {
 
 		window.removeEventListener('unload', this, false);
 		window.removeEventListener('TabOpen', this, true);
+
+		if (this.isListeningClickEvent) {
+			this.browser.removeEventListener('click', this, true);
+			this.isListeningClickEvent = false;
+		}
 	},
  
 	overrideGlobalFunctions : function OLITService_overrideGlobalFunctions() 
@@ -229,7 +234,10 @@ var OpenLinkInTabService = {
 	onLinkClick : function OLITUtils_onLinkClick(aEvent) 
 	{
 		var handler = aEvent.currentTarget.getAttribute('onclick');
-		if (handler) {
+		var domain = aEvent.originalTarget.ownerDocument.defaultView.location.hostname;
+		if (handler &&
+			this.handleClickEventDomainMatcher && domain &&
+			this.handleClickEventDomainMatcher.test(domain)) {
 			handler = new Function(
 				'event',
 				'var result = (function() { ' +
@@ -253,14 +261,34 @@ var OpenLinkInTabService = {
 		var value = this.getPref(aPrefName);
 		switch (aPrefName.replace(this.kPREFROOT + '.', ''))
 		{
-			case 'handleEventsBeforeWebPages':
-				if (value && !this.isHandlingClickEvent) {
-					this.browser.addEventListener('click', this, true);
-					this.isHandlingClickEvent = true;
+			case 'handleEventsBeforeWebPages.domains':
+				value = value.replace(/\./g, '\\.')
+							.replace(/\*/g, '.*')
+							.replace(/\?/g, '.')
+							.replace(/^[\s,\|]+|[\s,\|]+$/g, '')
+							.replace(/[\s,\|]+/g, '|');
+				try {
+					this.handleClickEventDomainMatcher = new RegExp(value, 'i');
 				}
-				else if (!value && this.isHandlingClickEvent) {
+				catch(e) {
+					this.handleClickEventDomainMatcher = null;
+				}
+			case 'openOuterLinkInNewTab':
+			case 'openAnyLinkInNewTab':
+			case 'handleEventsBeforeWebPages':
+				let requireListen = this.handleClickEventDomainMatcher &&
+						(
+							this.getPref(this.kPREFROOT + '.openOuterLinkInNewTab') ||
+							this.getPref(this.kPREFROOT + '.openAnyLinkInNewTab')
+						) &&
+						this.getPref(this.kPREFROOT + '.handleEventsBeforeWebPages');
+				if (requireListen && !this.isListeningClickEvent) {
+					this.browser.addEventListener('click', this, true);
+					this.isListeningClickEvent = true;
+				}
+				else if (!requireListen && this.isListeningClickEvent) {
 					this.browser.removeEventListener('click', this, true);
-					this.isHandlingClickEvent = false;
+					this.isListeningClickEvent = false;
 				}
 				break;
 
