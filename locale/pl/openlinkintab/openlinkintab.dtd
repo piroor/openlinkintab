@@ -8,6 +8,9 @@
 <!ENTITY config.link.outer   "Jeśli jest to odnośnik do innej witryny">
 <!ENTITY config.link.any     "Zawsze">
 
+<!ENTITY config.handleEventsBeforeWebPages "Handle click events on links by browser before author's scripts">
+<!ENTITY config.handleEventsBeforeWebPages.domains "on these websites:">
+
 <!ENTITY config.open_newwindow.caption "Niespodziewanie otwierane okno z odnośników na stronie otwieraj jako:">
 <!ENTITY config.open_newwindow.window  "okno">
 <!ENTITY config.open_newwindow.tab     "kartę (domyślnie działanie Firefoksa)">

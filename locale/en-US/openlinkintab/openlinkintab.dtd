@@ -8,6 +8,9 @@
 <!ENTITY config.link.outer   "Lv.1 Open links to different website in new tab">
 <!ENTITY config.link.any     "Lv.2 Open any link in new tab">
 
+<!ENTITY config.handleEventsBeforeWebPages "Handle click events on links by browser before author's scripts">
+<!ENTITY config.handleEventsBeforeWebPages.domains "on these websites:">
+
 <!ENTITY config.open_newwindow.caption "New window opened from links in webpages unexpectedly">
 <!ENTITY config.open_newwindow.window  "Open as Window">
 <!ENTITY config.open_newwindow.tab     "Open as Tab (Firefox default, recommended)">

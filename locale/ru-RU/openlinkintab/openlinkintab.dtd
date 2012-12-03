@@ -8,6 +8,9 @@
 <!ENTITY config.link.outer   "Уровень 1. Открывать ссылки на другой сайт в новой вкладке">
 <!ENTITY config.link.any     "Уровень 2. Открывать все ссылки в новой вкладке">
 
+<!ENTITY config.handleEventsBeforeWebPages "Handle click events on links by browser before author's scripts">
+<!ENTITY config.handleEventsBeforeWebPages.domains "on these websites:">
+
 <!ENTITY config.open_newwindow.caption "Открытие высплывающих окон">
 <!ENTITY config.open_newwindow.window  "Открывать как окно">
 <!ENTITY config.open_newwindow.tab     "Открывать как вкладку (в Firefox по умочанию)">

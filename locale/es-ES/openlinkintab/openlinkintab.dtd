@@ -8,6 +8,9 @@
 <!ENTITY config.link.outer   "Lv.1 Abrir enlaces a un diferente sitio en una nueva pestaña">
 <!ENTITY config.link.any     "Lv.2 Abrir cualquier enlace en una nueva pestaña">
 
+<!ENTITY config.handleEventsBeforeWebPages "Handle click events on links by browser before author's scripts">
+<!ENTITY config.handleEventsBeforeWebPages.domains "on these websites:">
+
 <!ENTITY config.open_newwindow.caption "Nuevas ventanas abiertas desde enlaces inesperadamente">
 <!ENTITY config.open_newwindow.window  "Abrir como una ventana">
 <!ENTITY config.open_newwindow.tab     "Abrir como pestaña (Predeterminado en Firefox)">

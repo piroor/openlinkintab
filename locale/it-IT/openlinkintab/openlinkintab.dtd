@@ -9,6 +9,9 @@
 <!ENTITY config.link.outer   "Lv.1 Apri i collegamenti a siti esterni in una nuova scheda">
 <!ENTITY config.link.any     "Lv.2 Apri tutti i collegamenti in una nuova scheda">
 
+<!ENTITY config.handleEventsBeforeWebPages "Handle click events on links by browser before author's scripts">
+<!ENTITY config.handleEventsBeforeWebPages.domains "on these websites:">
+
 <!ENTITY config.open_newwindow.caption "Forza i collegamenti che aprono nuove finestre">
 <!ENTITY config.open_newwindow.window  "ad aprirsi in una nuova finestra">
 <!ENTITY config.open_newwindow.tab     "ad aprirsi in una nuova scheda (comportamento predefinito di Firefox)">

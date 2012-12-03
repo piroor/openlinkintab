@@ -9,6 +9,9 @@
 <!ENTITY config.link.outer   "Lv.1 Ouvrir les liens d'un site web différent dans un nouvel onglet">
 <!ENTITY config.link.any     "Lv.2 Ouvrir tous les liens dans un nouvel onglet">
 
+<!ENTITY config.handleEventsBeforeWebPages "Handle click events on links by browser before author's scripts">
+<!ENTITY config.handleEventsBeforeWebPages.domains "on these websites:">
+
 <!ENTITY config.open_newwindow.caption "Nouvelle fenêtre ouverte spontanément à partir d'un lien d'une page web">
 <!ENTITY config.open_newwindow.window  "Ouvrir en fenêtre">
 <!ENTITY config.open_newwindow.tab     "Ouvrir en onglet (défaut Firefox, recommandé)">

@@ -8,6 +8,9 @@
 <!ENTITY config.link.outer   "位階-1 用新分頁開啟通往不同網站的鏈結">
 <!ENTITY config.link.any     "位階-2 用新分頁開啟所有鏈結">
 
+<!ENTITY config.handleEventsBeforeWebPages "Handle click events on links by browser before author's scripts">
+<!ENTITY config.handleEventsBeforeWebPages.domains "on these websites:">
+
 <!ENTITY config.open_newwindow.caption "從網頁鏈結開啟新視窗的控制">
 <!ENTITY config.open_newwindow.window  "用新視窗開啟">
 <!ENTITY config.open_newwindow.tab     "用新分頁開啟（Firefox 預設）">

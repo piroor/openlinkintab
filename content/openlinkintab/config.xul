@@ -21,6 +21,12 @@
 		<preference id="browser.link.open_newwindow"
 			name="browser.link.open_newwindow"
 			type="int"/>
+		<preference id="extensions.openlinkintab@piro.sakura.ne.jp.handleEventsBeforeWebPages"
+			name="extensions.openlinkintab@piro.sakura.ne.jp.handleEventsBeforeWebPages"
+			type="bool"/>
+		<preference id="extensions.openlinkintab@piro.sakura.ne.jp.handleEventsBeforeWebPages.domains"
+			name="extensions.openlinkintab@piro.sakura.ne.jp.handleEventsBeforeWebPages.domains"
+			type="string"/>
 	</preferences>
 
 	<vbox>
@@ -54,6 +60,20 @@
 				<radio value="3" label="&config.open_newwindow.tab;"/>
 			</radiogroup>
 		</groupbox>
+		<hbox>
+			<checkbox id="handleEventsBeforeWebPages-checkbox"
+				preference="extensions.openlinkintab@piro.sakura.ne.jp.handleEventsBeforeWebPages"
+				label="&config.handleEventsBeforeWebPages;"
+				flex="1"/>
+		</hbox>
+		<hbox align="center">
+			<spacer style="width:1em"/>
+			<label control="handleEventsBeforeWebPages.domains-textbox"
+				value="&config.handleEventsBeforeWebPages.domains;"/>
+			<textbox id="handleEventsBeforeWebPages.domains-textbox"
+				preference="extensions.openlinkintab@piro.sakura.ne.jp.handleEventsBeforeWebPages.domains"
+				flex="1"/>
+		</hbox>
 	</vbox>
 
 </prefpane>

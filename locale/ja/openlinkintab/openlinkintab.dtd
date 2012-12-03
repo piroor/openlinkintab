@@ -8,6 +8,9 @@
 <!ENTITY config.link.outer   "Lv.1 異なるサイトへのリンクをタブで開く">
 <!ENTITY config.link.any     "Lv.2 すべてのリンクをタブで開く">
 
+<!ENTITY config.handleEventsBeforeWebPages "リンクのクリック時のイベントをページ制作者のスクリプトよりも先に処理する">
+<!ENTITY config.handleEventsBeforeWebPages.domains "対象サイト:">
+
 <!ENTITY config.open_newwindow.caption "Webページのリンクから勝手に開かれたウィンドウの制御">
 <!ENTITY config.open_newwindow.window  "ウィンドウで開く">
 <!ENTITY config.open_newwindow.tab     "タブで開く（Firefox初期状態・推奨）">

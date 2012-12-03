@@ -8,6 +8,9 @@
 <!ENTITY config.link.outer   "Lv.1 在新标签中打开外部网站的链接">
 <!ENTITY config.link.any     "Lv.2 在新标签中打开所有链接">
 
+<!ENTITY config.handleEventsBeforeWebPages "Handle click events on links by browser before author's scripts">
+<!ENTITY config.handleEventsBeforeWebPages.domains "on these websites:">
+
 <!ENTITY config.open_newwindow.caption "如果页面链接要求打开到新窗口的话？">
 <!ENTITY config.open_newwindow.window  "在新窗口中打开">
 <!ENTITY config.open_newwindow.tab     "在新标签中打开（Firefox 默认，推荐）">
