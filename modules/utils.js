@@ -14,7 +14,7 @@
  * The Original Code is the Open Link in New Tab.
  *
  * The Initial Developer of the Original Code is YUKI "Piro" Hiroshi.
- * Portions created by the Initial Developer are Copyright (C) 2010
+ * Portions created by the Initial Developer are Copyright (C) 2010-2012
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s): YUKI "Piro" Hiroshi <piro.outsider.reflex@gmail.com>
@@ -165,6 +165,12 @@ var OpenLinkInTabUtils = {
 	domains : [ 
 		'browser.link.open_newwindow.restriction'
 	],
+ 
+	observe : function OLITUtils_observe(aSubject, aTopic, aData)
+	{
+		if (aTopic == 'nsPref:changed')
+			this.onPrefChange(aData);
+	},
  
 	onPrefChange : function OLITUtils_onPrefChange(aPrefName) 
 	{

@@ -39,6 +39,9 @@ var OpenLinkInTabService = {
 		this.overrideExtensionsOnInitAfter(); // hacks.js
 
 		this.initUninstallationListener();
+
+		this.addPrefListener(this);
+		this.onPrefChange(this.kPREFROOT + '.handleEventsBeforeWebPages');
 	},
 	initialized : false,
 	
@@ -198,6 +201,9 @@ var OpenLinkInTabService = {
 
 			case 'TabOpen':
 				return this.onTabOpened(aEvent);
+
+			case 'click':
+				return this.onLinkClick(aEvent);
 		}
 	},
 	
@@ -218,8 +224,51 @@ var OpenLinkInTabService = {
 			}
 			b.__openlinkintab__readiedToOpenDivertedTab = false;
 		}
-	}
+	},
+ 
+	onLinkClick : function OLITUtils_onLinkClick(aEvent) 
+	{
+		var handler = aEvent.currentTarget.getAttribute('onclick');
+		if (handler) {
+			handler = new Function(
+				'event',
+				'var result = (function() { ' +
+				handler +
+				' }).call(this);' +
+				'return result;'
+			);
+			let result = handler.call(this.browser, aEvent);
+			if (aEvent.defaultPrevented && aEvent.stopImmediatePropagation)
+				aEvent.stopImmediatePropagation();
+			return result;
+		}
+	},
   
+	/* Pref Listener */ 
+	domains : [ 
+		'extensions.openlinkintab@piro.sakura.ne.jp.'
+	],
+	onPrefChange : function OLITUtils_onPrefChange(aPrefName) 
+	{
+		var value = this.getPref(aPrefName);
+		switch (aPrefName.replace(this.kPREFROOT + '.', ''))
+		{
+			case 'handleEventsBeforeWebPages':
+				if (value && !this.isHandlingClickEvent) {
+					this.browser.addEventListener('click', this, true);
+					this.isHandlingClickEvent = true;
+				}
+				else if (!value && this.isHandlingClickEvent) {
+					this.browser.removeEventListener('click', this, true);
+					this.isHandlingClickEvent = false;
+				}
+				break;
+
+			default:
+				break;
+		}
+	}
+ 
 }; 
   
 (function() { 

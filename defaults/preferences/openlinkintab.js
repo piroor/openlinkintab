@@ -5,6 +5,7 @@ pref("extensions.openlinkintab@piro.sakura.ne.jp.openAnyLinkInNewTab.asChild", f
 pref("extensions.openlinkintab@piro.sakura.ne.jp.link.invertDefaultBehavior", false);
 pref("extensions.openlinkintab@piro.sakura.ne.jp.useEffectiveTLD", true);
 pref("extensions.openlinkintab@piro.sakura.ne.jp.checkUserHome", true);
+pref("extensions.openlinkintab@piro.sakura.ne.jp.handleEventsBeforeWebPages", false);
 
 pref("browser.link.open_newwindow.restriction.override", 0);
 
