@@ -12,6 +12,16 @@ function initLinkPane()
 		'openLinkInNewTab-scale',
 		'openLinkInNewTab-labels'
 	);
+	updateHandleEventsBeforeWebPages();
+}
+
+function updateHandleEventsBeforeWebPages()
+{
+	var domains = document.getElementById('handleEventsBeforeWebPages.domains-textbox');
+	if (document.getElementById('extensions.openlinkintab@piro.sakura.ne.jp.handleEventsBeforeWebPages').value)
+		domains.removeAttribute('disabled');
+	else
+		domains.setAttribute('disabled', true);
 }
 
 function initJSOpenPane()

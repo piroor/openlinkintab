@@ -64,7 +64,8 @@
 			<checkbox id="handleEventsBeforeWebPages-checkbox"
 				preference="extensions.openlinkintab@piro.sakura.ne.jp.handleEventsBeforeWebPages"
 				label="&config.handleEventsBeforeWebPages;"
-				flex="1"/>
+				flex="1"
+				oncommand="setTimeout(updateHandleEventsBeforeWebPages, 0)"/>
 		</hbox>
 		<hbox align="center">
 			<spacer style="width:1em"/>
