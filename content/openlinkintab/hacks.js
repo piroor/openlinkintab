@@ -23,12 +23,12 @@ OpenLinkInTabService.overrideExtensionsOnInitAfter = function OLITService_overri
 		eval('window.TMP_contentAreaClick = '+
 			window.TMP_contentAreaClick.toSource().replace(
 				'if (openT)',
-				<![CDATA[if (OpenLinkInTabService.checkReadyToOpenNewTabFromLink(linkNode)) {
-					event.stopPropagation();
-					event.preventDefault();
-					handleLinkClick(event, linkNode.href, linkNode);
-					return true;
-				} else $&]]>
+				'if (OpenLinkInTabService.checkReadyToOpenNewTabFromLink(linkNode)) {\n' +
+				'  event.stopPropagation();\n' +
+				'  event.preventDefault();\n' +
+				'  handleLinkClick(event, linkNode.href, linkNode);\n' +
+				'  return true;\n' +
+				'} else $&\n'
 			)
 		);
 		if (/\(?function TMP_contentAreaClick\(/.test(window.contentAreaClick.toSource()))
