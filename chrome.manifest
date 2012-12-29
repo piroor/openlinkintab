@@ -1,17 +1,17 @@
-content	openlinkintab	jar:chrome/openlinkintab.jar!/content/openlinkintab/
+content	openlinkintab	content/openlinkintab/
 
 overlay	chrome://browser/content/browser.xul	chrome://openlinkintab/content/openlinkintab.xul
 
-locale	openlinkintab	en-US	jar:chrome/openlinkintab.jar!/locale/en-US/openlinkintab/
-locale	openlinkintab	ja	jar:chrome/openlinkintab.jar!/locale/ja/openlinkintab/
-locale	openlinkintab	it-IT	jar:chrome/openlinkintab.jar!/locale/it-IT/openlinkintab/
-locale	openlinkintab	zh-CN	jar:chrome/openlinkintab.jar!/locale/zh-CN/openlinkintab/
-locale	openlinkintab	es-ES	jar:chrome/openlinkintab.jar!/locale/es-ES/openlinkintab/
-locale	openlinkintab	de-DE	jar:chrome/openlinkintab.jar!/locale/de-DE/openlinkintab/
-locale	openlinkintab	zh-TW	jar:chrome/openlinkintab.jar!/locale/zh-TW/openlinkintab/
-locale	openlinkintab	ru-RU	jar:chrome/openlinkintab.jar!/locale/ru-RU/openlinkintab/
-locale	openlinkintab	pl	jar:chrome/openlinkintab.jar!/locale/pl/openlinkintab/
-locale	openlinkintab	fr-FR	jar:chrome/openlinkintab.jar!/locale/fr-FR/openlinkintab/
+locale	openlinkintab	en-US	locale/en-US/openlinkintab/
+locale	openlinkintab	ja	locale/ja/openlinkintab/
+locale	openlinkintab	it-IT	locale/it-IT/openlinkintab/
+locale	openlinkintab	zh-CN	locale/zh-CN/openlinkintab/
+locale	openlinkintab	es-ES	locale/es-ES/openlinkintab/
+locale	openlinkintab	de-DE	locale/de-DE/openlinkintab/
+locale	openlinkintab	zh-TW	locale/zh-TW/openlinkintab/
+locale	openlinkintab	ru-RU	locale/ru-RU/openlinkintab/
+locale	openlinkintab	pl	locale/pl/openlinkintab/
+locale	openlinkintab	fr-FR	locale/fr-FR/openlinkintab/
 
 override chrome://openlinkintab/skin/config.css	chrome://openlinkintab/skin/config-4.css	appversion>=4.0b5pre
 
