@@ -1,5 +1,7 @@
 # History
 
+ - master/HEAD
+   * Modified: "jar" archive is no longer included.
  - 0.1.2012122901
    * Works on Nightly 20.0a1.
    * Improved: Dynamically modified links by author scripts can be detected as links to foreign websites. This feature is enabled on Google's search results by default, and you can activate it for other websites by custom configuration.
