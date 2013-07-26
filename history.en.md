@@ -1,6 +1,7 @@
 # History
 
  - master/HEAD
+   * Works on Firefox 25 and later.
    * Modified: "jar" archive is no longer included.
  - 0.1.2012122901
    * Works on Nightly 20.0a1.
