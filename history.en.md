@@ -1,6 +1,7 @@
 # History
 
  - master/HEAD
+ - 0.1.2013100801
    * Works on Firefox 25 and later.
    * Modified: "jar" archive is no longer included.
  - 0.1.2012122901
