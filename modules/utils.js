@@ -224,7 +224,7 @@ var OpenLinkInTabUtils = {
 	init : function OLITUtils_init() 
 	{
 		this.isMac = this.XULAppInfo.OS == 'Darwin';
-		this.addPrefListener(this);
+		prefs.addPrefListener(this);
 		this.onPrefChange('browser.link.open_newwindow.restriction.override');
 	}
  
