@@ -138,7 +138,7 @@ var OpenLinkInTabUtils = {
 			})) {
 			if (aWhere == 'current' && !isNewTab) {
 				divertedToTab = true;
-				aWhere = this.getPref('browser.tabs.loadInBackground') ? 'tabshifted' : 'tab' ;
+				aWhere = prefs.getPref('browser.tabs.loadInBackground') ? 'tabshifted' : 'tab' ;
 			}
 		}
 		else if (aWhere.indexOf('tab') > -1) {
@@ -194,7 +194,7 @@ var OpenLinkInTabUtils = {
 					let originalValue = prefs.getPref(target);
 					if (originalValue !== null && originalValue != value)
 						prefs.setPref(target+'.backup', originalValue);
-					prefs.setPref(target, this.getPref(aPrefName));
+					prefs.setPref(target, prefs.getPref(aPrefName));
 				}
 				this.prefOverriding = false;
 				break;
