@@ -98,51 +98,14 @@ var OpenLinkInTabService = {
 			let source = this._getFunctionSource(aFunc);
 			if (!source || !/^\(?function handleLinkClick/.test(source))
 				return false;
-			eval(aFunc+' = '+source.replace(  // for -Firefox 3.6
-				/(event.ctrlKey|event.metaKey)/,
-				'OpenLinkInTabService.checkReadyToOpenNewTabFromLink({\n' +
-				'  link     : (linkNode || { href : href }),\n' +
-				'  modifier : $1,\n' +
-				'  invert   : OpenLinkInTabService.getMyPref("link.invertDefaultBehavior")\n' +
-				'}) &&\n' +
-				'(\n' +
-				'  (OpenLinkInTabService.isNewTabAction(event) ? null : OpenLinkInTabService.readyToOpenDivertedTab()),\n' +
-				'  true\n' +
-				')\n'
-			).replace( // for -Firefox 3.6
-				/* あらゆるリンクからタブを開く設定の時に、アクセルキーが押されていた場合は
-				   反転された動作（通常のリンク読み込み）を行う */
-				/return\s+false;\s*case\s+1:/,
-				'  if ( // do nothing for Tab Mix Plus\n' +
-				'    !OpenLinkInTabService.getMyPref("compatibility.TMP") ||\n' +
-				'    !("TMP_contentAreaClick" in window)\n' +
-				'    ) {\n' +
-				'    if ("TreeStyleTabService" in window &&\n' +
-				'      TreeStyleTabService.checkToOpenChildTab())\n' +
-				'      TreeStyleTabService.stopToOpenChildTab();\n' +
-				'    if (OpenLinkInTabService.isAccelKeyPressed(event)) {\n' +
-				'      if (linkNode)\n' +
-				'        urlSecurityCheck(href,\n' +
-				'          "nodePrincipal" in linkNode.ownerDocument ?\n' +
-				'            linkNode.ownerDocument.nodePrincipal :\n' +
-				'            linkNode.ownerDocument.location.href\n' +
-				'        );\n' +
-				'      var postData = {};\n' +
-				'      href = getShortcutOrURI(href, postData);\n' +
-				'      if (!href) return false;\n' +
-				'      loadURI(href, null, postData.value, false);\n' +
-				'    }\n' +
-				'  }\n' +
-				'  return false;\n' +
-				'case 1:\n'
-			).replace( // for Firefox 4.0-
+			eval(aFunc+' = '+source.replace(
 				'where = whereToOpenLink(event);',
 				'$&\n' +
 				'  var OLITFilteringResult = OpenLinkInTabService.filterWhereToOpenLink(where, { linkNode : linkNode, event : event });\n' +
 				'  where = OLITFilteringResult.where;\n' +
 				'  if (OLITFilteringResult.divertedToTab)\n' +
 				'    OpenLinkInTabService.readyToOpenDivertedTab();\n'
-			).replace( // for Firefox 4.0-
+			).replace(
 				/(if \([^\)]*where == "current")/,
 				'$1 && !OLITFilteringResult.inverted'
 			));
