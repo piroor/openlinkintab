@@ -110,8 +110,8 @@ var OpenLinkInTabService = {
 				'  true\n' +
 				')\n'
 			).replace( // for -Firefox 3.6
-				/* �����郊���N����^�u���J���ݒ�̎��ɁA�A�N�Z���L�[��������Ă����ꍇ��
-				   ���]���ꂽ����i�ʏ�̃����N�ǂݍ��݁j���s�� */
+				/* あらゆるリンクからタブを開く設定の時に、アクセルキーが押されていた場合は
+				   反転された動作（通常のリンク読み込み）を行う */
 				/return\s+false;\s*case\s+1:/,
 				'  if ( // do nothing for Tab Mix Plus\n' +
 				'    !OpenLinkInTabService.getMyPref("compatibility.TMP") ||\n' +
