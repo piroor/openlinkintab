@@ -101,10 +101,10 @@ var OpenLinkInTabService = {
 			eval(aFunc+' = '+source.replace(
 				'where = whereToOpenLink(event);',
 				'$&\n' +
-				'  var OLITFilteringResult = OpenLinkInTabService.filterWhereToOpenLink(where, { linkNode : linkNode, event : event });\n' +
+				'  var OLITFilteringResult = OpenLinkInTabService.utils.filterWhereToOpenLink(where, { linkNode : linkNode, event : event });\n' +
 				'  where = OLITFilteringResult.where;\n' +
 				'  if (OLITFilteringResult.divertedToTab)\n' +
-				'    OpenLinkInTabService.readyToOpenDivertedTab();\n'
+				'    OpenLinkInTabService.utils.readyToOpenDivertedTab();\n'
 			).replace(
 				/(if \([^\)]*where == "current")/,
 				'$1 && !OLITFilteringResult.inverted'
@@ -127,10 +127,10 @@ var OpenLinkInTabService = {
 				'$1\n' +
 				'else if (\n' +
 				'  ( // do nothing for Tab Mix Plus\n' +
-				'    !OpenLinkInTabService.getMyPref("compatibility.TMP") ||\n' +
+				'    !OpenLinkInTabService.utils.getMyPref("compatibility.TMP") ||\n' +
 				'    !("TMP_contentAreaClick" in window)\n' +
 				'  ) &&\n' +
-				'  OpenLinkInTabService.checkReadyToOpenNewTabFromLink(wrapper)\n' +
+				'  OpenLinkInTabService.utils.checkReadyToOpenNewTabFromLink(wrapper)\n' +
 				'  ) {\n' +
 				'  event.stopPropagation();\n' +
 				'  event.preventDefault();\n' +
@@ -180,7 +180,7 @@ var OpenLinkInTabService = {
 		var tab = aEvent.originalTarget;
 		var b   = this.helper.getTabBrowserFromChild(tab);
 		if (b.__openlinkintab__readiedToOpenDivertedTab) {
-			if (!this.getPref('browser.tabs.loadDivertedInBackground')) {
+			if (!this.utils.prefs.getPref('browser.tabs.loadDivertedInBackground')) {
 				window.setTimeout(function() {
 					if (b.selectedTab == tab)
 						return;
@@ -221,7 +221,7 @@ var OpenLinkInTabService = {
 	],
 	onPrefChange : function OLITUtils_onPrefChange(aPrefName) 
 	{
-		var value = this.getPref(aPrefName);
+		var value = this.utils.prefs.getPref(aPrefName);
 		switch (aPrefName.replace(this.kPREFROOT + '.', ''))
 		{
 			case 'handleEventsBeforeWebPages.domains':
@@ -241,10 +241,10 @@ var OpenLinkInTabService = {
 			case 'handleEventsBeforeWebPages':
 				let requireListen = this.handleClickEventDomainMatcher &&
 						(
-							this.getPref(this.kPREFROOT + '.openOuterLinkInNewTab') ||
-							this.getPref(this.kPREFROOT + '.openAnyLinkInNewTab')
+							this.utils.prefs.getPref(this.kPREFROOT + '.openOuterLinkInNewTab') ||
+							this.utils.prefs.getPref(this.kPREFROOT + '.openAnyLinkInNewTab')
 						) &&
-						this.getPref(this.kPREFROOT + '.handleEventsBeforeWebPages');
+						this.utils.prefs.getPref(this.kPREFROOT + '.handleEventsBeforeWebPages');
 				if (requireListen && !this.isListeningClickEvent) {
 					this.browser.addEventListener('click', this, true);
 					this.isListeningClickEvent = true;
@@ -266,7 +266,7 @@ var OpenLinkInTabService = {
 	var namespace = {};
 	Components.utils.import('resource://openlinkintab-modules/utils.js', namespace);
 	Components.utils.import('resource://openlinkintab-modules/autoNewTabHelper.js', namespace);
-	OpenLinkInTabService.__proto__ = namespace.OpenLinkInTabUtils;
+	OpenLinkInTabService.utils = namespace.OpenLinkInTabUtils;
 	OpenLinkInTabService.helper = namespace.autoNewTabHelper;
 
 	window.addEventListener('DOMContentLoaded', OpenLinkInTabService, false);

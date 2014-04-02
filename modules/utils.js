@@ -45,7 +45,7 @@ Components.utils.import('resource://openlinkintab-modules/namespace.jsm');
 var window = getNamespaceFor('piro.sakura.ne.jp');
  
 var OpenLinkInTabUtils = { 
-	__proto__ : window['piro.sakura.ne.jp'].prefs,
+	prefs : prefs,
 
 	kPREFROOT : 'extensions.openlinkintab@piro.sakura.ne.jp',
 	kID : 'openlinkintab-id',
@@ -174,27 +174,27 @@ var OpenLinkInTabUtils = {
  
 	onPrefChange : function OLITUtils_onPrefChange(aPrefName) 
 	{
-		var value = this.getPref(aPrefName);
+		var value = prefs.getPref(aPrefName);
 		switch (aPrefName)
 		{
 			case 'browser.link.open_newwindow.restriction':
 				if (this.prefOverriding) return;
 				aPrefName += '.override';
-				this.setPref(aPrefName, value);
+				prefs.setPref(aPrefName, value);
 			case 'browser.link.open_newwindow.restriction.override':
-				if (this.getPref(aPrefName+'.force')) {
+				if (prefs.getPref(aPrefName+'.force')) {
 					let defaultValue = this.getDefaultPref(aPrefName);
 					if (value != defaultValue) {
-						this.setPref(aPrefName, defaultValue);
+						prefs.setPref(aPrefName, defaultValue);
 						return;
 					}
 				}
 				this.prefOverriding = true;
 				let (target = aPrefName.replace('.override', '')) {
-					let originalValue = this.getPref(target);
+					let originalValue = prefs.getPref(target);
 					if (originalValue !== null && originalValue != value)
-						this.setPref(target+'.backup', originalValue);
-					this.setPref(target, this.getPref(aPrefName));
+						prefs.setPref(target+'.backup', originalValue);
+					prefs.setPref(target, this.getPref(aPrefName));
 				}
 				this.prefOverriding = false;
 				break;
@@ -208,17 +208,17 @@ var OpenLinkInTabUtils = {
 	
 	getMyPref : function OLITUtils_getMyPref(aPrefstring) 
 	{
-		return this.getPref(this.kPREFROOT+'.'+aPrefstring);
+		return prefs.getPref(this.kPREFROOT+'.'+aPrefstring);
 	},
  
 	setMyPref : function OLITUtils_setMyPref(aPrefstring, aNewValue) 
 	{
-		return this.setPref(this.kPREFROOT+'.'+aPrefstring, aNewValue);
+		return prefs.setPref(this.kPREFROOT+'.'+aPrefstring, aNewValue);
 	},
  
 	clearMyPref : function OLITUtils_clearMyPref(aPrefstring) 
 	{
-		return this.clearPref(this.kPREFROOT+'.'+aPrefstring);
+		return prefs.clearPref(this.kPREFROOT+'.'+aPrefstring);
 	},
   
 	init : function OLITUtils_init() 
