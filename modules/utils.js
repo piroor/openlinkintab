@@ -14,7 +14,7 @@
  * The Original Code is the Open Link in New Tab.
  *
  * The Initial Developer of the Original Code is YUKI "Piro" Hiroshi.
- * Portions created by the Initial Developer are Copyright (C) 2010-2012
+ * Portions created by the Initial Developer are Copyright (C) 2010-2014
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s): YUKI "Piro" Hiroshi <piro.outsider.reflex@gmail.com>
@@ -40,6 +40,7 @@ const Ci = Components.interfaces;
  
 Components.utils.import('resource://openlinkintab-modules/prefs.js'); 
 Components.utils.import('resource://openlinkintab-modules/autoNewTabHelper.js');
+Components.utils.import('resource://openlinkintab-modules/inherit.jsm'); 
 
 Components.utils.import('resource://openlinkintab-modules/namespace.jsm');
 var window = getNamespaceFor('piro.sakura.ne.jp');
@@ -96,7 +97,7 @@ var OpenLinkInTabUtils = {
 		else if (aLink instanceof Ci.nsIDOMElement) {
 			options = { link : aLink };
 		}
-		options.__proto__ = {
+		options = inherit({
 			external : {
 				newTab : this.getMyPref('openOuterLinkInNewTab') || this.getMyPref('openAnyLinkInNewTab'),
 				forceChild : this.getMyPref('openOuterLinkInNewTab.asChild')
@@ -107,7 +108,7 @@ var OpenLinkInTabUtils = {
 			},
 			useEffectiveTLD : this.getMyPref('useEffectiveTLD'),
 			checkUserHome   : this.getMyPref('checkUserHome')
-		};
+		}, options);
 		options.uri = options.link.href;
 		var result = window['piro.sakura.ne.jp'].autoNewTabHelper.checkReadyToOpenNewTab(options);
 
