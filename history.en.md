@@ -1,6 +1,7 @@
 # History
 
  - master/HEAD
+ - 0.1.2014050101
    * Works on Nightly 32.0a1.
    * Drop support for Firefox 23 and older.
    * Better compatibility with NoScript.

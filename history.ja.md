@@ -1,6 +1,7 @@
 # 更新履歴
 
  - master/HEAD
+ - 0.1.2014050101
    * Nightly 32.0a1に対応
    * Firefox 23以下のバージョンへの対応を終了
    * NoScriptとの互換性を向上
