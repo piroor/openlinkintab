@@ -16,6 +16,7 @@ var OpenLinkInTabService = {
 			return;
 
 		this.overrideExtensionsPreInit(); // hacks.js
+		this.overrideGlobalFunctionsPreInit();
 	},
 	preInitialized : false,
  
@@ -86,7 +87,7 @@ var OpenLinkInTabService = {
 		}
 	},
  
-	overrideGlobalFunctions : function OLITService_overrideGlobalFunctions() 
+	overrideGlobalFunctionsPreInit : function OLITService_overrideGlobalFunctionsPreInit() 
 	{
 		[
 			'window.duplicateTab.handleLinkClick',
@@ -112,7 +113,10 @@ var OpenLinkInTabService = {
 			source = null;
 			return true;
 		}, this);
-
+	},
+ 
+	overrideGlobalFunctions : function OLITService_overrideGlobalFunctions() 
+	{
 		[
 			'window.permaTabs.utils.wrappedFunctions["window.contentAreaClick"]',
 			'window.__contentAreaClick',
