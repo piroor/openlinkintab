@@ -1,8 +1,9 @@
 # 更新履歴
 
  - master/HEAD
-   * Nightly 31.0a1に対応
+   * Nightly 32.0a1に対応
    * Firefox 23以下のバージョンへの対応を終了
+   * NoScriptとの互換性を向上
  - 0.1.2013100801
    * Firefox 25に対応
    * jarファイルを含めない形のパッケージングに変更

@@ -1,8 +1,9 @@
 # History
 
  - master/HEAD
-   * Works on Nightly 31.0a1.
-   * Drop support for Firefox 23 and older
+   * Works on Nightly 32.0a1.
+   * Drop support for Firefox 23 and older.
+   * Better compatibility with NoScript.
  - 0.1.2013100801
    * Works on Firefox 25 and later.
    * Modified: "jar" archive is no longer included.
