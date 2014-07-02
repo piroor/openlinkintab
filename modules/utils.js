@@ -95,7 +95,11 @@ var OpenLinkInTabUtils = {
 			};
 		}
 		else if (aLink instanceof Ci.nsIDOMElement) {
-			options = { link : aLink };
+			while (aLink && !aLink.href) {
+				aLink = aLink.parentNode;
+			}
+			if (aLink)
+				options = { link : aLink };
 		}
 		options = inherit({
 			external : {

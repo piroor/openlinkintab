@@ -84,6 +84,7 @@ var OpenLinkInTabService = {
 		this.utils.prefs.removePrefListener(this);
 
 		if (this.isListeningClickEvent) {
+			this.browser.removeEventListener('mousedown', this, true);
 			this.browser.removeEventListener('click', this, true);
 			this.isListeningClickEvent = false;
 		}
@@ -176,6 +177,9 @@ var OpenLinkInTabService = {
 			case 'TabOpen':
 				return this.onTabOpened(aEvent);
 
+			case 'mousedown':
+				return this.onLinkMouseDown(aEvent);
+
 			case 'click':
 				return this.onLinkClick(aEvent);
 		}
@@ -198,6 +202,19 @@ var OpenLinkInTabService = {
 			}
 			b.__openlinkintab__readiedToOpenDivertedTab = false;
 		}
+	},
+ 
+	onLinkMouseDown : function OLITUtils_onLinkMouseDown(aEvent) 
+	{
+		var link = aEvent.originalTarget;
+		while (link && !link.href) {
+			link = link.parentNode;
+		}
+		if (!link || !link.parentNode)
+			return;
+
+		if (this.utils.checkReadyToOpenNewTabFromLink(link))
+			link.setAttribute(this.helper.kNEW_TAB_READY, true);
 	},
  
 	onLinkClick : function OLITUtils_onLinkClick(aEvent) 
@@ -247,15 +264,17 @@ var OpenLinkInTabService = {
 			case 'handleEventsBeforeWebPages':
 				let requireListen = this.handleClickEventDomainMatcher &&
 						(
-							this.utils.prefs.getPref(this.kPREFROOT + '.openOuterLinkInNewTab') ||
-							this.utils.prefs.getPref(this.kPREFROOT + '.openAnyLinkInNewTab')
+							this.utils.getMyPref('openOuterLinkInNewTab') ||
+							this.utils.getMyPref('openAnyLinkInNewTab')
 						) &&
-						this.utils.prefs.getPref(this.kPREFROOT + '.handleEventsBeforeWebPages');
+						this.utils.getMyPref('handleEventsBeforeWebPages');
 				if (requireListen && !this.isListeningClickEvent) {
+					this.browser.addEventListener('mousedown', this, true);
 					this.browser.addEventListener('click', this, true);
 					this.isListeningClickEvent = true;
 				}
 				else if (!requireListen && this.isListeningClickEvent) {
+					this.browser.removeEventListener('mousedown', this, true);
 					this.browser.removeEventListener('click', this, true);
 					this.isListeningClickEvent = false;
 				}
