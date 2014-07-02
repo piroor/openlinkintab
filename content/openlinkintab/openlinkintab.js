@@ -41,7 +41,7 @@ var OpenLinkInTabService = {
 
 		this.initUninstallationListener();
 
-		this.addPrefListener(this);
+		this.utils.prefs.addPrefListener(this);
 		this.onPrefChange(this.kPREFROOT + '.handleEventsBeforeWebPages.domains');
 	},
 	initialized : false,
@@ -80,6 +80,8 @@ var OpenLinkInTabService = {
 
 		window.removeEventListener('unload', this, false);
 		window.removeEventListener('TabOpen', this, true);
+
+		this.utils.prefs.removePrefListener(this);
 
 		if (this.isListeningClickEvent) {
 			this.browser.removeEventListener('click', this, true);
@@ -229,7 +231,7 @@ var OpenLinkInTabService = {
 		switch (aPrefName.replace(this.kPREFROOT + '.', ''))
 		{
 			case 'handleEventsBeforeWebPages.domains':
-				value = value.replace(/\./g, '\\.')
+				value = (value || '').replace(/\./g, '\\.')
 							.replace(/\*/g, '.*')
 							.replace(/\?/g, '.')
 							.replace(/^[\s,\|]+|[\s,\|]+$/g, '')

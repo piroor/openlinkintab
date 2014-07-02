@@ -17,13 +17,13 @@ OpenLinkInTabService.overrideExtensionsOnInitBefore = function OLITService_overr
 OpenLinkInTabService.overrideExtensionsOnInitAfter = function OLITService_overrideExtensionsOnInitAfter() {
 
 	// Tab Mix Plus
-	if (this.getMyPref('compatibility.TMP') &&
+	if (this.utils.getMyPref('compatibility.TMP') &&
 		'TMupdateSettings' in window) {
 
 		eval('window.TMP_contentAreaClick = '+
 			window.TMP_contentAreaClick.toSource().replace(
 				'if (openT)',
-				'if (OpenLinkInTabService.checkReadyToOpenNewTabFromLink(linkNode)) {\n' +
+				'if (OpenLinkInTabService.utils.checkReadyToOpenNewTabFromLink(linkNode)) {\n' +
 				'  event.stopPropagation();\n' +
 				'  event.preventDefault();\n' +
 				'  handleLinkClick(event, linkNode.href, linkNode);\n' +
