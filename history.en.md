@@ -1,6 +1,7 @@
 # History
 
  - master/HEAD
+   * Works on Nightly 33.0a1.
    * Detect external links correctly for webpages which replaces links to their redirector by "mousedown" event (like search results of Google.)
  - 0.1.2014050101
    * Works on Nightly 32.0a1.
