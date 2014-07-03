@@ -15,8 +15,9 @@ var OpenLinkInTabService = {
 		if (location.href.indexOf('chrome://browser/content/browser.xul') != 0)
 			return;
 
-		this.overrideExtensionsPreInit(); // hacks.js
-		this.overrideGlobalFunctionsPreInit();
+		this.overrideExtensionsOnInitBefore(); // hacks.js
+		this.overrideGlobalFunctions();
+		this.overrideExtensionsOnInitAfter(); // hacks.js
 	},
 	preInitialized : false,
  
@@ -34,10 +35,6 @@ var OpenLinkInTabService = {
 
 		window.addEventListener('unload', this, false);
 		window.addEventListener('TabOpen', this, true);
-
-		this.overrideExtensionsOnInitBefore(); // hacks.js
-		this.overrideGlobalFunctions();
-		this.overrideExtensionsOnInitAfter(); // hacks.js
 
 		this.initUninstallationListener();
 
@@ -90,7 +87,7 @@ var OpenLinkInTabService = {
 		}
 	},
  
-	overrideGlobalFunctionsPreInit : function OLITService_overrideGlobalFunctionsPreInit() 
+	overrideGlobalFunctions : function OLITService_overrideGlobalFunctions() 
 	{
 		[
 			'window.duplicateTab.handleLinkClick',
@@ -116,10 +113,7 @@ var OpenLinkInTabService = {
 			source = null;
 			return true;
 		}, this);
-	},
- 
-	overrideGlobalFunctions : function OLITService_overrideGlobalFunctions() 
-	{
+
 		[
 			'window.permaTabs.utils.wrappedFunctions["window.contentAreaClick"]',
 			'window.__contentAreaClick',
@@ -204,7 +198,7 @@ var OpenLinkInTabService = {
 		}
 	},
  
-	onLinkMouseDown : function OLITUtils_onLinkMouseDown(aEvent) 
+	onLinkMouseDown : function OLITService_onLinkMouseDown(aEvent) 
 	{
 		var link = aEvent.originalTarget;
 		while (link && !link.href) {
@@ -213,11 +207,14 @@ var OpenLinkInTabService = {
 		if (!link || !link.parentNode)
 			return;
 
-		if (this.utils.checkReadyToOpenNewTabFromLink(link))
+		var domain = link.ownerDocument.defaultView.location.hostname;
+		if (this.handleClickEventDomainMatcher && domain &&
+			this.handleClickEventDomainMatcher.test(domain) &&
+			this.utils.checkReadyToOpenNewTabFromLink(link))
 			link.setAttribute(this.helper.kNEW_TAB_READY, true);
 	},
  
-	onLinkClick : function OLITUtils_onLinkClick(aEvent) 
+	onLinkClick : function OLITService_onLinkClick(aEvent) 
 	{
 		var handler = aEvent.currentTarget.getAttribute('onclick');
 		var domain = aEvent.originalTarget.ownerDocument.defaultView.location.hostname;
@@ -242,7 +239,7 @@ var OpenLinkInTabService = {
 	domains : [ 
 		'extensions.openlinkintab@piro.sakura.ne.jp.'
 	],
-	onPrefChange : function OLITUtils_onPrefChange(aPrefName) 
+	onPrefChange : function OLITService_onPrefChange(aPrefName) 
 	{
 		var value = this.utils.prefs.getPref(aPrefName);
 		switch (aPrefName.replace(this.kPREFROOT + '.', ''))

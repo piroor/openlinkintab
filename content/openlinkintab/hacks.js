@@ -1,4 +1,4 @@
-OpenLinkInTabService.overrideExtensionsPreInit = function OLITService_overrideExtensionsPreInit() {
+OpenLinkInTabService.overrideExtensionsOnInitBefore = function OLITService_overrideExtensionsOnInitBefore() {
 	// Highlander
 	// https://addons.mozilla.org/firefox/addon/4086
 	if ('Highlander' in window) {
@@ -9,9 +9,6 @@ OpenLinkInTabService.overrideExtensionsPreInit = function OLITService_overrideEx
 			)
 		);
 	}
-};
-
-OpenLinkInTabService.overrideExtensionsOnInitBefore = function OLITService_overrideExtensionsOnInitBefore() {
 };
 
 OpenLinkInTabService.overrideExtensionsOnInitAfter = function OLITService_overrideExtensionsOnInitAfter() {
@@ -34,6 +31,5 @@ OpenLinkInTabService.overrideExtensionsOnInitAfter = function OLITService_overri
 		if (/\(?function TMP_contentAreaClick\(/.test(window.contentAreaClick.toSource()))
 			window.contentAreaClick = window.TMP_contentAreaClick;
 	}
-
 
 };
