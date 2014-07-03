@@ -216,18 +216,20 @@ var OpenLinkInTabService = {
  
 	onLinkClick : function OLITService_onLinkClick(aEvent) 
 	{
-		var handler = aEvent.currentTarget.getAttribute('onclick');
+		var handler = aEvent.currentTarget.getAttribute('onclick') || window.contentAreaClick;
 		var domain = aEvent.originalTarget.ownerDocument.defaultView.location.hostname;
 		if (handler &&
 			this.handleClickEventDomainMatcher && domain &&
 			this.handleClickEventDomainMatcher.test(domain)) {
-			handler = new Function(
-				'event',
-				'var result = (function() { ' +
-				handler +
-				' }).call(this);' +
-				'return result;'
-			);
+			if (typeof handler == 'string') {
+				handler = new Function(
+					'event',
+					'var result = (function() { ' +
+					handler +
+					' }).call(this);' +
+					'return result;'
+				);
+			}
 			let result = handler.call(this.browser, aEvent);
 			if (aEvent.defaultPrevented && aEvent.stopImmediatePropagation)
 				aEvent.stopImmediatePropagation();
