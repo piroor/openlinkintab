@@ -5,7 +5,7 @@
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    em:id="openlinkintab@piro.sakura.ne.jp"
                    em:name="Open Link in New Tab"
-                   em:version="0.1.2014050101"
+                   em:version="0.1.2014070301"
                    em:creator="YUKI &quot;Piro&quot; Hiroshi"
                    em:description="Loads links in new tabs, by conditions."
                    em:homepageURL="http://piro.sakura.ne.jp/xul/_openlinkintab.html.en"
