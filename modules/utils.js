@@ -94,7 +94,9 @@ var OpenLinkInTabUtils = {
 				link : { href : aLink }
 			};
 		}
-		else if (aLink instanceof Ci.nsIDOMElement) {
+		else if (aLink &&
+				aLink.ownerDocument &&
+				aLink instanceof aLink.ownerDocument.defaultView.Element) {
 			while (aLink && !aLink.href) {
 				aLink = aLink.parentNode;
 			}
