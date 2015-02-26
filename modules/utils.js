@@ -197,7 +197,8 @@ var OpenLinkInTabUtils = {
 					}
 				}
 				this.prefOverriding = true;
-				let (target = aPrefName.replace('.override', '')) {
+				{
+					let target = aPrefName.replace('.override', '');
 					let originalValue = prefs.getPref(target);
 					if (originalValue !== null && originalValue != value)
 						prefs.setPref(target+'.backup', originalValue);
