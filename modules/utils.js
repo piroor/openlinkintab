@@ -33,7 +33,7 @@
  *
  * ***** END LICENSE BLOCK ******/
  
-const EXPORTED_SYMBOLS = ['OpenLinkInTabUtils']; 
+var EXPORTED_SYMBOLS = ['OpenLinkInTabUtils']; 
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
