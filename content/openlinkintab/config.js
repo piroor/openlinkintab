@@ -1,6 +1,4 @@
-Components.utils.import('resource://openlinkintab-modules/prefs.js', {});
-Components.utils.import('resource://openlinkintab-modules/namespace.jsm');
-var prefs = getNamespaceFor('piro.sakura.ne.jp')['piro.sakura.ne.jp'].prefs;
+var { prefs } = Components.utils.import('resource://openlinkintab-modules/prefs.js', {});
 
 var gOpenLinkInTabScale;
 

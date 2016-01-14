@@ -1,17 +1,4 @@
-OpenLinkInTabService.overrideExtensionsOnInitBefore = function OLITService_overrideExtensionsOnInitBefore() {
-	// Highlander
-	// https://addons.mozilla.org/firefox/addon/4086
-	if ('Highlander' in window) {
-		eval('Highlander.overrideHandleLinkClick = '+
-			Highlander.overrideHandleLinkClick.toSource().replace(
-				/(var )?origHandleLinkClick/g,
-				'window.__openlinkintab__highlander__origHandleLinkClick'
-			)
-		);
-	}
-};
-
-OpenLinkInTabService.overrideExtensionsOnInitAfter = function OLITService_overrideExtensionsOnInitAfter() {
+OpenLinkInTabService.overrideExtensions = function OLITService_overrideExtensions() {
 
 	// Tab Mix Plus
 	if (this.utils.getMyPref('compatibility.TMP') &&

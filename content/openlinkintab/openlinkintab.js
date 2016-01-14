@@ -1,11 +1,13 @@
-var OpenLinkInTabService = { 
+(function() {
+var { inherit } = Components.utils.import('resource://openlinkintab-modules/inherit.jsm', {});
+var { OpenLinkInTabConstants } = Components.utils.import('resource://openlinkintab-modules/constants.js', {});
+var { OpenLinkInTabChromeUtils } = Components.utils.import('resource://openlinkintab-modules/chromeUtils.js', {});
+var { autoNewTabHelper} = Components.utils.import('resource://openlinkintab-modules/autoNewTabHelper.js', {});
+
+var OpenLinkInTabService = inherit(OpenLinkInTabConstants, { 
+	utils : OpenLinkInTabChromeUtils,
+	helper : autoNewTabHelper,
 	
-	get browser() 
-	{
-		return 'SplitBrowser' in window ? window.SplitBrowser.activeBrowser :
-			window.gBrowser ;
-	},
- 
 	preInit : function TSTService_preInit() 
 	{
 		if (this.preInitialized) return;
@@ -15,9 +17,7 @@ var OpenLinkInTabService = {
 		if (location.href.indexOf('chrome://browser/content/browser.xul') != 0)
 			return;
 
-		this.overrideExtensionsOnInitBefore(); // hacks.js
-		this.overrideGlobalFunctions();
-		this.overrideExtensionsOnInitAfter(); // hacks.js
+		this.overrideExtensions(); // hacks.js
 	},
 	preInitialized : false,
  
@@ -35,23 +35,17 @@ var OpenLinkInTabService = {
 
 		window.addEventListener('unload', this, false);
 		window.addEventListener('TabOpen', this, true);
+		window.addEventListener('TabRemotenessChange', this, true);
+
+		window.messageManager.loadFrameScript(this.CONTENT_SCRIPT, true);
 
 		this.initUninstallationListener();
-
-		this.utils.prefs.addPrefListener(this);
-		this.onPrefChange(this.kPREFROOT + '.handleEventsBeforeWebPages.domains');
 	},
 	initialized : false,
 	
 	initUninstallationListener : function OLITService_initUninstallationListener() 
 	{
-		var namespace = {};
-		Components.utils.import(
-			'resource://openlinkintab-modules/prefs.js',
-			namespace
-		);
-		var prefs = namespace.prefs;
-		namespace = void(0);
+		var { prefs } = Components.utils.import('resource://openlinkintab-modules/prefs.js', {});
 		var restorePrefs = function() {
 				if (!prefs) return;
 				[
@@ -77,83 +71,14 @@ var OpenLinkInTabService = {
 
 		window.removeEventListener('unload', this, false);
 		window.removeEventListener('TabOpen', this, true);
+		window.removeEventListener('TabRemotenessChange', this, true);
 
-		this.utils.prefs.removePrefListener(this);
+		window.messageManager.broadcastAsyncMessage(this.MESSAGE_TYPE, {
+			command : this.COMMAND_SHUTDOWN
+		});
+		window.messageManager.removeDelayedFrameScript(this.CONTENT_SCRIPT);
+	},
 
-		if (this.isListeningClickEvent) {
-			this.browser.removeEventListener('mousedown', this, true);
-			this.browser.removeEventListener('click', this, true);
-			this.isListeningClickEvent = false;
-		}
-	},
- 
-	overrideGlobalFunctions : function OLITService_overrideGlobalFunctions() 
-	{
-		[
-			'window.duplicateTab.handleLinkClick',
-			'window.__openlinkintab__highlander__origHandleLinkClick',
-			'window.__splitbrowser__handleLinkClick',
-			'window.__ctxextensions__handleLinkClick',
-			'window.handleLinkClick'
-		].some(function(aFunc) {
-			let source = this._getFunctionSource(aFunc);
-			if (!source || !/^\(?function handleLinkClick/.test(source))
-				return false;
-			eval(aFunc+' = '+source.replace(
-				'where = whereToOpenLink(event);',
-				'$&\n' +
-				'  var OLITFilteringResult = OpenLinkInTabService.utils.filterWhereToOpenLink(where, { linkNode : linkNode, event : event });\n' +
-				'  where = OLITFilteringResult.where;\n' +
-				'  if (OLITFilteringResult.divertedToTab)\n' +
-				'    OpenLinkInTabService.utils.readyToOpenDivertedTab();\n'
-			).replace(
-				/(if \([^\)]*where == "current")/,
-				'$1 && !OLITFilteringResult.inverted'
-			));
-			source = null;
-			return true;
-		}, this);
-
-		[
-			'window.permaTabs.utils.wrappedFunctions["window.contentAreaClick"]',
-			'window.__contentAreaClick',
-			'window.__ctxextensions__contentAreaClick',
-			'window.contentAreaClick'
-		].forEach(function(aFunc) {
-			let source = this._getFunctionSource(aFunc);
-			if (!source || !/^\(?function contentAreaClick/.test(source))
-				return;
-			eval(aFunc+' = '+source.replace(
-				/((openWebPanel\([^\;]+\);|PlacesUIUtils.showMinimalAddBookmarkUI\([^;]+\);)\s*event.preventDefault\(\);\s*return false;\s*\})/,
-				'$1\n' +
-				'else if (\n' +
-				'  ( // do nothing for Tab Mix Plus\n' +
-				'    !OpenLinkInTabService.utils.getMyPref("compatibility.TMP") ||\n' +
-				'    !("TMP_contentAreaClick" in window)\n' +
-				'  ) &&\n' +
-				'  OpenLinkInTabService.utils.checkReadyToOpenNewTabFromLink(wrapper)\n' +
-				'  ) {\n' +
-				'  event.stopPropagation();\n' +
-				'  event.preventDefault();\n' +
-				'  handleLinkClick(event, wrapper.href, linkNode);\n' +
-				'  return true;\n' +
-				'}\n'
-			));
-			source = null;
-		}, this);
-	},
-	
-	_getFunctionSource : function OLITService_getFunctionSource(aFunc) 
-	{
-		var func;
-		try {
-			eval('func = '+aFunc);
-		}
-		catch(e) {
-			return null;
-		}
-		return func ? func.toSource() : null ;
-	},
   
 	handleEvent : function OLITService_handleEvent(aEvent) 
 	{
@@ -171,11 +96,8 @@ var OpenLinkInTabService = {
 			case 'TabOpen':
 				return this.onTabOpened(aEvent);
 
-			case 'mousedown':
-				return this.onLinkMouseDown(aEvent);
-
-			case 'click':
-				return this.onLinkClick(aEvent);
+			case 'TabRemotenessChange':
+				return this.onTabRemotenessChange(aEvent);
 		}
 	},
 	
@@ -198,102 +120,19 @@ var OpenLinkInTabService = {
 		}
 	},
  
-	onLinkMouseDown : function OLITService_onLinkMouseDown(aEvent) 
+	onTabRemotenessChange : function OLITService_onTabRemotenessChange(aEvent)
 	{
-		var link = aEvent.originalTarget;
-		while (link && !link.href) {
-			link = link.parentNode;
-		}
-		if (!link || !link.parentNode)
-			return;
-
-		var domain = link.ownerDocument.defaultView.location.hostname;
-		if (this.handleClickEventDomainMatcher && domain &&
-			this.handleClickEventDomainMatcher.test(domain) &&
-			this.utils.checkReadyToOpenNewTabFromLink(link))
-			link.setAttribute(this.helper.kNEW_TAB_READY, true);
-	},
- 
-	onLinkClick : function OLITService_onLinkClick(aEvent) 
-	{
-		var handler = aEvent.currentTarget.getAttribute('onclick') || window.contentAreaClick;
-		var domain = aEvent.originalTarget.ownerDocument.defaultView.location.hostname;
-		if (handler &&
-			this.handleClickEventDomainMatcher && domain &&
-			this.handleClickEventDomainMatcher.test(domain)) {
-			if (typeof handler == 'string') {
-				handler = new Function(
-					'event',
-					'var result = (function() { ' +
-					handler +
-					' }).call(this);' +
-					'return result;'
-				);
-			}
-			let result = handler.call(this.browser, aEvent);
-			if (aEvent.defaultPrevented && aEvent.stopImmediatePropagation)
-				aEvent.stopImmediatePropagation();
-			return result;
-		}
-	},
-  
-	/* Pref Listener */ 
-	domains : [ 
-		'extensions.openlinkintab@piro.sakura.ne.jp.'
-	],
-	onPrefChange : function OLITService_onPrefChange(aPrefName) 
-	{
-		var value = this.utils.prefs.getPref(aPrefName);
-		switch (aPrefName.replace(this.kPREFROOT + '.', ''))
-		{
-			case 'handleEventsBeforeWebPages.domains':
-				value = (value || '').replace(/\./g, '\\.')
-							.replace(/\*/g, '.*')
-							.replace(/\?/g, '.')
-							.replace(/^[\s,\|]+|[\s,\|]+$/g, '')
-							.replace(/[\s,\|]+/g, '|');
-				try {
-					this.handleClickEventDomainMatcher = new RegExp(value, 'i');
-				}
-				catch(e) {
-					this.handleClickEventDomainMatcher = null;
-				}
-			case 'openOuterLinkInNewTab':
-			case 'openAnyLinkInNewTab':
-			case 'handleEventsBeforeWebPages':
-				let requireListen = this.handleClickEventDomainMatcher &&
-						(
-							this.utils.getMyPref('openOuterLinkInNewTab') ||
-							this.utils.getMyPref('openAnyLinkInNewTab')
-						) &&
-						this.utils.getMyPref('handleEventsBeforeWebPages');
-				if (requireListen && !this.isListeningClickEvent) {
-					this.browser.addEventListener('mousedown', this, true);
-					this.browser.addEventListener('click', this, true);
-					this.isListeningClickEvent = true;
-				}
-				else if (!requireListen && this.isListeningClickEvent) {
-					this.browser.removeEventListener('mousedown', this, true);
-					this.browser.removeEventListener('click', this, true);
-					this.isListeningClickEvent = false;
-				}
-				break;
-
-			default:
-				break;
-		}
+		var tab = aEvent.originalTarget;
+		tab.linkedBrowser.messageManager.sendAsyncMessage(this.MESSAGE_TYPE, {
+			command : this.COMMAND_NOTIFY_REMOTENESS_UPDATED
+		});
 	}
  
-}; 
+}); 
   
-(function() { 
-	var namespace = {};
-	Components.utils.import('resource://openlinkintab-modules/utils.js', namespace);
-	Components.utils.import('resource://openlinkintab-modules/autoNewTabHelper.js', namespace);
-	OpenLinkInTabService.utils = namespace.OpenLinkInTabUtils;
-	OpenLinkInTabService.helper = namespace.autoNewTabHelper;
+window.addEventListener('DOMContentLoaded', OpenLinkInTabService, false);
+window.addEventListener('load', OpenLinkInTabService, false);
 
-	window.addEventListener('DOMContentLoaded', OpenLinkInTabService, false);
-	window.addEventListener('load', OpenLinkInTabService, false);
+window.OpenLinkInTabService = OpenLinkInTabService;
 })();
  
