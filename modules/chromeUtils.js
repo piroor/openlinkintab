@@ -42,6 +42,7 @@ var { autoNewTabHelper } = Components.utils.import('resource://openlinkintab-mod
 var { inherit } = Components.utils.import('resource://openlinkintab-modules/inherit.jsm', {}); 
 var { OpenLinkInTabUtils } = Components.utils.import('resource://openlinkintab-modules/utils.js', {}); 
 var { prefs } = Components.utils.import('resource://openlinkintab-modules/prefs.js', {}); 
+var { UninstallationListener } = Components.utils.import('resource://openlinkintab-modules/UninstallationListener.js', {}); 
  
 var OpenLinkInTabChromeUtils = inherit(OpenLinkInTabUtils, { 
  
@@ -90,6 +91,22 @@ var OpenLinkInTabChromeUtils = inherit(OpenLinkInTabUtils, {
 	{
 		OpenLinkInTabUtils.init.call(this);
 		this.onPrefChange('browser.link.open_newwindow.restriction.override');
+
+		var restorePrefs = (function() {
+				[
+					'browser.link.open_newwindow.restriction'
+				].forEach(function(aPref) {
+					var backup = prefs.getPref(aPref+'.backup');
+					if (backup === null) return;
+					prefs.setPref(aPref+'.override', backup); // we have to set to ".override" pref, to avoid unexpectedly reset by the preference listener.
+					prefs.clearPref(aPref+'.backup');
+				});
+			}).bind(this);
+		new UninstallationListener({
+			id : 'openlinkintab@piro.sakura.ne.jp',
+			onuninstalled : restorePrefs,
+			ondisabled : restorePrefs
+		});
 	}
  
 }); 
