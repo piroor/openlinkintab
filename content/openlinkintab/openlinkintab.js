@@ -2,11 +2,9 @@
 var { inherit } = Components.utils.import('resource://openlinkintab-modules/inherit.jsm', {});
 var { OpenLinkInTabConstants } = Components.utils.import('resource://openlinkintab-modules/constants.js', {});
 var { OpenLinkInTabChromeUtils } = Components.utils.import('resource://openlinkintab-modules/chromeUtils.js', {});
-var { autoNewTabHelper} = Components.utils.import('resource://openlinkintab-modules/autoNewTabHelper.js', {});
 
 var OpenLinkInTabService = inherit(OpenLinkInTabConstants, { 
 	utils : OpenLinkInTabChromeUtils,
-	helper : autoNewTabHelper,
 	
 	preInit : function TSTService_preInit() 
 	{
@@ -37,31 +35,8 @@ var OpenLinkInTabService = inherit(OpenLinkInTabConstants, {
 		window.addEventListener('TabRemotenessChange', this, true);
 
 		window.messageManager.loadFrameScript(this.CONTENT_SCRIPT, true);
-
-		this.initUninstallationListener();
 	},
 	initialized : false,
-	
-	initUninstallationListener : function OLITService_initUninstallationListener() 
-	{
-		var { prefs } = Components.utils.import('resource://openlinkintab-modules/prefs.js', {});
-		var restorePrefs = function() {
-				if (!prefs) return;
-				[
-					'browser.link.open_newwindow.restriction'
-				].forEach(function(aPref) {
-					var backup = prefs.getPref(aPref+'.backup');
-					if (backup === null) return;
-					prefs.setPref(aPref+'.override', backup); // we have to set to ".override" pref, to avoid unexpectedly reset by the preference listener.
-					prefs.clearPref(aPref+'.backup');
-				});
-			};
-		new window['piro.sakura.ne.jp'].UninstallationListener({
-			id : 'openlinkintab@piro.sakura.ne.jp',
-			onuninstalled : restorePrefs,
-			ondisabled : restorePrefs
-		});
-	},
   
 	destroy : function OLITService_destroy() 
 	{
