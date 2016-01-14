@@ -273,8 +273,9 @@ var autoNewTabHelper = {
 			ownerTab         : nextOwnerTab,
 			lastRelatedTab   : lastRelated,
 			tabbrowser       : tabbrowser,
-			sourceHost : sourceHost,
-			targetHost : targetHost
+			// for debugging
+			sourceHost       : sourceHost,
+			targetHost       : targetHost
 		};
 	},
  
