@@ -34,7 +34,6 @@ var OpenLinkInTabService = inherit(OpenLinkInTabConstants, {
 		window.removeEventListener('load', this, false);
 
 		window.addEventListener('unload', this, false);
-		window.addEventListener('TabOpen', this, true);
 		window.addEventListener('TabRemotenessChange', this, true);
 
 		window.messageManager.loadFrameScript(this.CONTENT_SCRIPT, true);
@@ -70,7 +69,6 @@ var OpenLinkInTabService = inherit(OpenLinkInTabConstants, {
 		this.initialized = false;
 
 		window.removeEventListener('unload', this, false);
-		window.removeEventListener('TabOpen', this, true);
 		window.removeEventListener('TabRemotenessChange', this, true);
 
 		window.messageManager.broadcastAsyncMessage(this.MESSAGE_TYPE, {
@@ -93,32 +91,11 @@ var OpenLinkInTabService = inherit(OpenLinkInTabConstants, {
 			case 'unload':
 				return this.destroy();
 
-			case 'TabOpen':
-				return this.onTabOpened(aEvent);
-
 			case 'TabRemotenessChange':
 				return this.onTabRemotenessChange(aEvent);
 		}
 	},
 	
-	onTabOpened : function OLITService_onTabOpened(aEvent) 
-	{
-		var tab = aEvent.originalTarget;
-		var b   = this.helper.getTabBrowserFromChild(tab);
-		if (b.__openlinkintab__readiedToOpenDivertedTab) {
-			if (!this.utils.prefs.getPref('browser.tabs.loadDivertedInBackground')) {
-				window.setTimeout(function() {
-					if (b.selectedTab == tab)
-						return;
-
-					var owner = b.selectedTab;
-					b.selectedTab = tab;
-					tab.owner = owner;
-				}, 0);
-			}
-			b.__openlinkintab__readiedToOpenDivertedTab = false;
-		}
-	},
  
 	onTabRemotenessChange : function OLITService_onTabRemotenessChange(aEvent)
 	{

@@ -12,16 +12,12 @@
 	var Cr = Components.results;
 
 	var { OpenLinkInTabUtils } = Cu.import('resource://openlinkintab-modules/utils.js', {});
-	var { Services } = Cu.import('resource://gre/modules/Services.jsm', {});
-	var { BrowserUtils } = Cu.import('resource://gre/modules/BrowserUtils.jsm', {});
 
 	function free() {
 		free =
 			Cc = Ci = Cu = Cr =
 
 			OpenLinkInTabUtils =
-			Services =
-			BrowserUtils =
 
 			messageListener =
 
@@ -80,54 +76,27 @@
 		if (!link)
 			return;
 
-		var newTabReadyLink = link.getAttribute(OpenLinkInTabUtils.NEW_TAB_READY) == 'true';
-		var sourceURI = link.ownerDocument.defaultView.location.href;
 		var result = OpenLinkInTabUtils.whereToOpenLink({
 				uri       : link.href,
-				sourceURI : sourceURI,
-				newTabReadyLink : newTabReadyLink,
+				sourceURI : link.ownerDocument.defaultView.location.href,
+				newTabReadyLink : link.getAttribute(OpenLinkInTabUtils.NEW_TAB_READY) == 'true',
 				action    : aEvent,
 				global    : global
 			});
 		if (result.where.indexOf('tab') == 0 && result.divertedToTab) {
-			aEvent.preventDefault();
-			aEvent.stopImmediatePropagation();
-
-			let referrerPolicy = link.ownerDocument.referrerPolicy;
-			if (Services.prefs.getBoolPref('network.http.enablePerElementReferrer')) {
-				let referrerAttrValue = Services.netUtils.parseAttributePolicyString(link.getAttribute('referrerpolicy'));
-				if (referrerAttrValue !== Ci.nsIHttpChannel.REFERRER_POLICY_DEFAULT) {
-					referrerPolicy = referrerAttrValue;
+			let originalTarget = link.getAttribute('target');
+			link.setAttribute('target', '_blank');
+			link.ownerDocument.defaultView.setTimeout(function() {
+				try {
+					if (originalTarget)
+						link.setAttribute('target', originalTarget);
+					else
+						link.removeAttribute('target');
 				}
-			}
-			let message = {
-				button   : aEvent.button,
-				shiftKey : aEvent.shiftKey,
-				ctrlKey  : aEvent.ctrlKey,
-				metaKey  : aEvent.metaKey,
-				altKey   : aEvent.altKey,
-				href     : link.href,
-				title    : link.getAttribute('title'),
-				bookmark : (
-					aEvent.button == 0 &&
-					!aEvent.ctrlKey &&
-					!aEvent.shiftKey &&
-					!aEvent.altKey &&
-					!aEvent.metaKey &&
-					link.getAttribute('rel') == 'sidebar'
-				),
-				referrerPolicy : referrerPolicy,
-				noReferrer : BrowserUtils.linkHasNoReferrer(link),
-				__openlinkintab__sourceURI : sourceURI,
-				__openlinkintab__newTabReadyLink : newTabReadyLink
-			};
-			try {
-				BrowserUtils.urlSecurityCheck(link.href, link.ownerDocument.nodePrincipal);
-			}
-			catch(error) {
-				return;
-			}
-			global.sendAsyncMessage('Content:Click', message);
+				catch(e) {
+				}
+			}, 10);
+			link.removeAttribute(OpenLinkInTabUtils.NEW_TAB_READY);
 		}
 		// aEvent.target.ownerDocument.defaultView.alert('clickHandler: '+JSON.stringify(result)+' / '+JSON.stringify(OpenLinkInTabUtils.config));
 	}

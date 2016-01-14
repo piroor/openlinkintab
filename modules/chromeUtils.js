@@ -90,28 +90,6 @@ var OpenLinkInTabChromeUtils = inherit(OpenLinkInTabUtils, {
 	{
 		OpenLinkInTabUtils.init.call(this);
 		this.onPrefChange('browser.link.open_newwindow.restriction.override');
-
-		var { ContentClick } = Components.utils.import('resource:///modules/ContentClick.jsm', {});
-		
-		eval('ContentClick.contentAreaClick = '+ContentClick.contentAreaClick.toString().replace(
-			'where = window.whereToOpenLink(json);',
-			'$&\n' +
-			'  var OLITFilteringResult = OpenLinkInTabChromeUtils.whereToOpenLink({\n' +
-			'        where           : where, \n' +
-			'        uri             : json.href, \n' +
-			'        sourceURI       : json.__openlinkintab__sourceURI || window.gBrowser.currentURI.spec, \n' + // ???
-			'        newTabReadyLink : json.__openlinkintab__newTabReadyLink, \n' + // ???
-			'        action          : json, \n' +
-			'        global          : window \n' +
-			'      });\n' +
-			'  where = OLITFilteringResult.where;\n' +
-//			'  window.alert([JSON.stringify(OLITFilteringResult), JSON.stringify(json)]);\n' +
-			'  if (OLITFilteringResult.divertedToTab)\n' +
-			'    window.gBrowser.__openlinkintab__readiedToOpenDivertedTab = true;\n'
-		).replace(
-			/(if \([^\)]*where == "current")/,
-			'$1 && !OLITFilteringResult.inverted'
-		));
 	}
  
 }); 
