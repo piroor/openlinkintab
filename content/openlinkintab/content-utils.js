@@ -65,8 +65,8 @@
 			return;
 
 		var domain = link.ownerDocument.defaultView.location.hostname;
-		if (OpenLinkInTabUtils.handleClickEventDomainMatcher && domain &&
-			OpenLinkInTabUtils.handleClickEventDomainMatcher.test(domain) &&
+		if (OpenLinkInTabUtils.config.handleClickEventDomainMatcher && domain &&
+			OpenLinkInTabUtils.config.handleClickEventDomainMatcher.test(domain) &&
 			OpenLinkInTabUtils.checkReadyToOpenNewTabFromLink(link))
 			link.setAttribute(OpenLinkInTabUtils.NEW_TAB_READY, true);
 	}
