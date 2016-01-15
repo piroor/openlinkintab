@@ -215,10 +215,7 @@ var OpenLinkInTabUtils = inherit(OpenLinkInTabConstants, {
 	},
 
 	domains : [ 
-		OpenLinkInTabConstants.PREFROOT,
-		'browser.tabs.loadInBackground',
-		'browser.tabs.opentabfor.middleclick',
-		'browser.altClickSave'
+		OpenLinkInTabConstants.PREFROOT
 	],
  
 	observe : function OLITUtils_observe(aSubject, aTopic, aData)
