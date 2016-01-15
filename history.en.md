@@ -4,6 +4,7 @@
    * Support handling of keyboard operations also.
    * Drop support of a secret preference `extensions.openlinkintab@piro.sakura.ne.jp.link.invertDefaultBehavior`.
      (Because it can't be done anymore.)
+     Instead [Open Link in Current](https://addons.mozilla.org/firefox/addon/open-link-in-current/) will help you.
  - 1.0.2016011401
    * Works with e10s (multi-process mode).
    * Drop support for Firefox 37 and older versions.

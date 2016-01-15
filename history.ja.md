@@ -2,8 +2,8 @@
 
  - master/HEAD
    * キーボード操作でリンクを開く場合にも対応
-   * 隠し設定 `extensions.openlinkintab@piro.sakura.ne.jp.link.invertDefaultBehavior` を削除
-     （原理的に実現できなくなったため）
+   * 隠し設定 `extensions.openlinkintab@piro.sakura.ne.jp.link.invertDefaultBehavior` を削除（原理的に実現できなくなったため）。
+     代替として[Open Link in Current](https://addons.mozilla.org/firefox/addon/open-link-in-current/)の利用が推奨されます。
  - 1.0.2016011401
    * e10s（マルチプロセス）に対応
    * Firefox 37およびそれ以前のサポートを終了
