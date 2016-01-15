@@ -10,6 +10,5 @@ var OpenLinkInTabConstants = {
 	MESSAGE_TYPE : 'openlinkintab',
 
 	COMMAND_SHUTDOWN : 'shutdown',
-	COMMAND_NOTIFY_REMOTENESS_UPDATED : 'notify-remoteness-updated',
-	COMMAND_NOTIFY_CONFIG_UPDATED : 'notify-config-updated'
+	COMMAND_NOTIFY_REMOTENESS_UPDATED : 'notify-remoteness-updated'
 };

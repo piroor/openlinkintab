@@ -74,10 +74,6 @@ var OpenLinkInTabUtils = inherit(OpenLinkInTabConstants, {
 			return OpenLinkInTabUtils.getMyPref('checkUserHome');
 		},
 
-		get linkInvertDefaultBehavior() {
-			return OpenLinkInTabUtils.getMyPref('link.invertDefaultBehavior');
-		},
-
 		get debug() {
 			return OpenLinkInTabUtils.getMyPref('debug');
 		},
@@ -164,14 +160,12 @@ var OpenLinkInTabUtils = inherit(OpenLinkInTabConstants, {
 	whereToOpenLink : function OLITUtils_whereToOpenLink(aParams) 
 	{
 		var where = aParams.where || this.whereToOpenLinkPlain(aParams.action);
-		var inverted = false;
 		var divertedToTab = false;
 		var isNewTabAction = this.isNewTabAction(aParams.action);
 		if (this.checkReadyToOpenNewTabFromLink({
 				uri        : aParams.uri,
 				sourceURI  : aParams.sourceURI,
 				newTab     : isNewTabAction || aParams.newTabReadyLink,
-				invert     : this.config.linkInvertDefaultBehavior,
 				global     : aParams.global
 			})) {
 			if (where == 'current' && !isNewTabAction) {
@@ -181,11 +175,9 @@ var OpenLinkInTabUtils = inherit(OpenLinkInTabConstants, {
 		}
 		else if (where.indexOf('tab') > -1) {
 			where = 'current';
-			inverted = true;
 		}
 		return {
 			where         : where,
-			inverted      : inverted,
 			divertedToTab : divertedToTab
 		};
 	},
