@@ -21,6 +21,9 @@
 
 			messageListener =
 
+			getLinkFromEvent =
+			linksDivertedToTab =
+
 			onLinkMouseDown =
 			onLinkClick =
 
@@ -38,70 +41,89 @@
 				global.removeMessageListener(OpenLinkInTabUtils.MESSAGE_TYPE, messageListener);
 				global.removeEventListener('mousedown', onLinkMouseDown, true);
 				global.removeEventListener('click', onLinkClick, true);
+				global.removeEventListener('keydown', onLinkMouseDown, true);
+				global.removeEventListener('keypress', onLinkClick, true);
 				free();
 				return;
 
 			case OpenLinkInTabUtils.COMMAND_NOTIFY_REMOTENESS_UPDATED:
 				global.removeEventListener('mousedown', onLinkMouseDown, true);
 				global.removeEventListener('click', onLinkClick, true);
+				global.removeEventListener('keydown', onLinkMouseDown, true);
+				global.removeEventListener('keypress', onLinkClick, true);
 				global.addEventListener('mousedown', onLinkMouseDown, true);
 				global.addEventListener('click', onLinkClick, true);
+				global.addEventListener('keydown', onLinkMouseDown, true);
+				global.addEventListener('keypress', onLinkClick, true);
 				return;
 		}
 	};
 	global.addMessageListener(OpenLinkInTabUtils.MESSAGE_TYPE, messageListener);
- 
-	function onLinkMouseDown(aEvent) 
+
+	function getLinkFromEvent(aEvent)
 	{
 		var link = aEvent.originalTarget;
 		while (link && !link.href) {
 			link = link.parentNode;
 		}
 		if (!link || !link.parentNode)
-			return;
-
-		var domain = link.ownerDocument.defaultView.location.hostname;
-		if (OpenLinkInTabUtils.config.handleClickEventDomainMatcher && domain &&
-			OpenLinkInTabUtils.config.handleClickEventDomainMatcher.test(domain) &&
-			OpenLinkInTabUtils.checkReadyToOpenNewTabFromLink(link))
-			link.setAttribute(OpenLinkInTabUtils.NEW_TAB_READY, true);
+			return null;
+		return link;
 	}
- 
-	function onLinkClick(aEvent)
+	var linksDivertedToTab = new WeakMap();
+
+	function onLinkMouseDown(aEvent) 
 	{
-		var link = aEvent.originalTarget;
-		while (link && !link.href) {
-			link = link.parentNode;
-		}
+		var link = getLinkFromEvent(aEvent);
 		if (!link)
 			return;
 
+		var domain = link.ownerDocument.defaultView.location.hostname;
+		var newTabReadyLink = (
+				OpenLinkInTabUtils.config.handleClickEventDomainMatcher && domain &&
+				OpenLinkInTabUtils.config.handleClickEventDomainMatcher.test(domain) &&
+				OpenLinkInTabUtils.checkReadyToOpenNewTabFromLink(link)
+			);
 		var result = OpenLinkInTabUtils.whereToOpenLink({
 				uri       : link.href,
 				sourceURI : link.ownerDocument.defaultView.location.href,
-				newTabReadyLink : link.getAttribute(OpenLinkInTabUtils.NEW_TAB_READY) == 'true',
+				newTabReadyLink : newTabReadyLink,
 				action    : aEvent,
 				global    : global
 			});
-		if (result.where.indexOf('tab') == 0 && result.divertedToTab) {
-			let originalTarget = link.getAttribute('target');
+		var divertedToTab = result.where.indexOf('tab') == 0 && result.divertedToTab;
+		if (divertedToTab) {
+			linksDivertedToTab.set(link, {
+				target : link.getAttribute('target')
+			});
 			link.setAttribute('target', '_blank');
-			link.ownerDocument.defaultView.setTimeout(function() {
-				try {
-					if (originalTarget)
-						link.setAttribute('target', originalTarget);
-					else
-						link.removeAttribute('target');
-				}
-				catch(e) {
-				}
-			}, 10);
-			link.removeAttribute(OpenLinkInTabUtils.NEW_TAB_READY);
 		}
 		if (OpenLinkInTabUtils.config.debug)
-			aEvent.target.ownerDocument.defaultView.alert('onLinkClick: '+JSON.stringify(result)+' / '+JSON.stringify(OpenLinkInTabUtils.config));
+			aEvent.target.ownerDocument.defaultView.console.log('onLinkMouseDown: '+JSON.stringify(result)+' / '+JSON.stringify(OpenLinkInTabUtils.config));
+	}
+
+	function onLinkClick(aEvent) 
+	{
+		var link = getLinkFromEvent(aEvent);
+		if (!link)
+			return;
+
+		link.ownerDocument.defaultView.setTimeout(function() {
+			try {
+				var backupData = linksDivertedToTab.get(link);
+				linksDivertedToTab.delete(link);
+				if (backupData.target)
+					link.setAttribute('target', backupData.target);
+				else
+					link.removeAttribute('target');
+			}
+			catch(e) {
+			}
+		}, 10);
 	}
 
 	global.addEventListener('mousedown', onLinkMouseDown, true);
 	global.addEventListener('click', onLinkClick, true);
+	global.addEventListener('keydown', onLinkMouseDown, true);
+	global.addEventListener('keypress', onLinkClick, true);
 })(this);
