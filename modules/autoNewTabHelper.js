@@ -162,24 +162,23 @@ var autoNewTabHelper = {
 	checkReadyToOpenNewTab : function OLITUtils_checkReadyToOpenNewTab(aParams) 
 	{
 /*
-	挙動の説明
+	* When the domain of the loading URI is different from the domain of the source URI,
+	  and a new tab will be opened:
+	  => Do nothing for tab. If the tab should be opened as a child of the source tab,
+	     call TST's readyToOpenChildTab() automatically.
 
-	・現在のサイトと異なるサイトを読み込む場合にタブを開く時：
-	  →特に何もしない。新しく開くタブを子タブにする場合は別途
-	    readyToOpenChildTabを使う。
-
-	・現在のサイトと同じサイトのページを読み込む場合にタブを開く時：
-	  →親のタブは同じサイトか？
-	    No ：子タブを開く
-	    Yes：兄弟としてタブを開く。ただし、このタブからのタブはすべて
-	         現在のタブと次の兄弟タブとの間に開かれ、仮想サブツリーとなる。
-	         →現在のタブに「__autoNewTabHelper__next」プロパティが
-	           あるか？
-	           Yes：__autoNewTabHelper__nextで示されたタブの直前に
-	                新しい兄弟タブを挿入する。
-	           No ：現在のタブの次の兄弟タブのIDを__autoNewTabHelper__next
-	                プロパティに保持し、仮想の子タブを挿入する位置の
-	                基準とする。
+	* When the domain of the loading URI is same to the domain of the source URI,
+	  and a new tab will be opened:
+	  => Is the domain of the parent tab is same to the source?
+	     No : Open it as a new child tab (regular behavior).
+	     Yes: Open it as a new sibling tab (special behavior).
+	          If more other sibling tabs are going to be opened,
+	          then they are placed after existing newly opened siblings
+	          like a virtual tree.
+	          => Does the current (source) tab has the "__autoNewTabHelper__next" property?
+	             Yes: Open new sibling tab before the tab referred by the "__autoNewTabHelper__next".
+	             No : Store the next sibling of the current tab to the "__autoNewTabHelper__next",
+	                  and use the information on the next time.
 */
 
 		aParams = aParams || { uri : '' };
