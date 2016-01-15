@@ -21,3 +21,6 @@ pref("extensions.openlinkintab@piro.sakura.ne.jp.handleEventsBeforeWebPages.doma
 pref("browser.link.open_newwindow.restriction.override", 0);
 
 pref("extensions.openlinkintab@piro.sakura.ne.jp.compatibility.TMP", true); // Tab Mix Plus
+
+pref("extensions.openlinkintab@piro.sakura.ne.jp.debug", false);
+

@@ -98,7 +98,8 @@
 			}, 10);
 			link.removeAttribute(OpenLinkInTabUtils.NEW_TAB_READY);
 		}
-		// aEvent.target.ownerDocument.defaultView.alert('clickHandler: '+JSON.stringify(result)+' / '+JSON.stringify(OpenLinkInTabUtils.config));
+		if (OpenLinkInTabUtils.config.debug)
+			aEvent.target.ownerDocument.defaultView.alert('onLinkClick: '+JSON.stringify(result)+' / '+JSON.stringify(OpenLinkInTabUtils.config));
 	}
 
 	global.addEventListener('mousedown', onLinkMouseDown, true);

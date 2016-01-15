@@ -77,6 +77,11 @@ var OpenLinkInTabUtils = inherit(OpenLinkInTabConstants, {
 		get linkInvertDefaultBehavior() {
 			return OpenLinkInTabUtils.getMyPref('link.invertDefaultBehavior');
 		},
+
+		get debug() {
+			return OpenLinkInTabUtils.getMyPref('debug');
+		},
+
 		get loadInBackground() {
 			return prefs.getPref('browser.tabs.loadInBackground');
 		},
