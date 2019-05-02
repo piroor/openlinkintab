@@ -1,29 +1,29 @@
 <!ENTITY config.title        "Configuración de Open Link in New Tab">
 
-<!ENTITY config.tabs.link     "Links">
+<!ENTITY config.tabs.link     "Enlaces">
 <!ENTITY config.tabs.jsopen     "Scripts">
 
-<!ENTITY config.link.caption "Automatic New Tab Level for Links">
-<!ENTITY config.link.none    "Lv.0 Nothing (Firefox default)">
-<!ENTITY config.link.outer   "Lv.1 Abrir enlaces a un diferente sitio en una nueva pestaña">
-<!ENTITY config.link.any     "Lv.2 Abrir cualquier enlace en una nueva pestaña">
+<!ENTITY config.link.caption "Auto-nivel para enlaces">
+<!ENTITY config.link.none    "Lv.0 Nada (predeterminado en Firefox)">
+<!ENTITY config.link.outer   "Lv.1 Abrir enlaces a sitios diferentes en nueva pestaña">
+<!ENTITY config.link.any     "Lv.2 Abrir todo enlace en nueva pestaña">
 
-<!ENTITY config.handleEventsBeforeWebPages "Handle click events on links by browser before author's scripts">
-<!ENTITY config.handleEventsBeforeWebPages.domains "on these websites:">
+<!ENTITY config.handleEventsBeforeWebPages "Procesar clics en enlaces con prioridad a scripts de autor">
+<!ENTITY config.handleEventsBeforeWebPages.domains "en estos sitios:">
 
-<!ENTITY config.open_newwindow.caption "Nuevas ventanas abiertas desde enlaces inesperadamente">
-<!ENTITY config.open_newwindow.window  "Abrir como una ventana">
-<!ENTITY config.open_newwindow.tab     "Abrir como pestaña (Predeterminado en Firefox)">
-<!ENTITY config.open_newwindow.current "Load into the Current Tab anyway">
+<!ENTITY config.open_newwindow.caption "Nuevas ventanas abiertas inesperadamente desde enlaces">
+<!ENTITY config.open_newwindow.window  "Abrir como ventana">
+<!ENTITY config.open_newwindow.tab     "Abrir como pestaña (predeterminado en Firefox)">
+<!ENTITY config.open_newwindow.current "Cargar en pestaña actual">
 
-<!ENTITY config.jsopen.caption "Nuevas ventanas abiertas desde Scripts">
-<!ENTITY config.jsopen.default "Abrir como ventana cuando contienen un ancho o altura especial. (Predeterminado en Firefox)">
-<!ENTITY config.jsopen.forcetab "Abrir como pestañas en ves de ventanas (Recomendado)">
-<!ENTITY config.jsopen.current  "Load into the Current Tab anyway">
+<!ENTITY config.jsopen.caption "Nuevas ventanas abiertas desde scripts">
+<!ENTITY config.jsopen.default "Abrir como ventana de contener ancho o altura especial (predeterminado en Firefox)">
+<!ENTITY config.jsopen.forcetab "Abrir como pestañas en lugar de ventanas (recomendado)">
+<!ENTITY config.jsopen.current  "Cargar en pestaña actual">
 
 
 <!ENTITY config.tabs.advanced "Avanzado">
 
-<!ENTITY config.useEffectiveTLD.caption  "Detecting method for &quot;same website&quot;">
-<!ENTITY config.useEffectiveTLD.enabled  "by Domain (&quot;aaa.example.com&quot; and &quot;bbb.example.com&quot; are same websites)">
-<!ENTITY config.useEffectiveTLD.disabled "by Host (&quot;aaa.example.com&quot; and &quot;bbb.example.com&quot; are different websites)">
+<!ENTITY config.useEffectiveTLD.caption  "Detección para &quot;sitios similares&quot;">
+<!ENTITY config.useEffectiveTLD.enabled  "por dominio (&quot;aaa.example.com&quot; y &quot;bbb.example.com&quot; son iguales)">
+<!ENTITY config.useEffectiveTLD.disabled "por sitio (&quot;aaa.example.com&quot; y &quot;bbb.example.com&quot; son diferentes)">
